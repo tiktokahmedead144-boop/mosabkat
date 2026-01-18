@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">المنصة التعليمية الشاملة</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+        body { font-family: 'Cairo', sans-serif; background-color: #f4f7f6; user-select: none; }
+        .hidden { display: none !important; }
+        .modal-animate { animation: slideUp 0.4s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .opt-btn { transition: all 0.2s; border: 2px solid #e2e8f0; border-radius: 1rem; padding: 1.25rem; text-align: right; font-weight: 700; width: 100%; background: white; }
+        .opt-btn:hover:not(:disabled) { border-color: #3b82f6; background: #eff6ff; transform: translateX(-5px); }
+        .correct-ans { background-color: #dcfce7 !important; border-color: #22c55e !important; color: #14532d; }
+        .wrong-ans { background-color: #fee2e2 !important; border-color: #ef4444 !important; color: #7f1d1d; }
+        #app-banner { background: linear-gradient(90deg, #1e40af, #3b82f6); color: white; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .progress-bar-fill { transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
+</head>
+<body class="text-slate-800 pb-32">
+
+    <div id="loading-screen" class="fixed inset-0 bg-white z-[999] flex flex-col justify-center items-center">
+        <div class="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+        <p class="font-bold text-slate-500">جاري تحميل المنصة...</p>
+    </div>
+
+    <div id="app-banner" class="hidden p-3 transition-all">
+        <div class="container mx-auto flex justify-between items-center px-4">
+            <div class="flex items-center gap-3">
+                <i class="fab fa-android text-2xl text-green-300"></i>
+                <p class="font-bold text-sm" id="ui-app-text"></p>
+            </div>
+            <a id="ui-app-link" href="#" target="_blank" class="bg-yellow-400 text-blue-900 px-5 py-1 rounded-full font-black text-xs shadow-lg">تحميل</a>
+        </div>
+    </div>
+
+    <audio id="s-correct" src="https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3"></audio>
+    <audio id="s-wrong" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3"></audio>
+    <audio id="s-clap" src="https://assets.mixkit.co/sfx/preview/mixkit-audience-clapping-strong-3012.mp3"></audio>
+
+    <nav class="bg-white border-b-4 border-blue-700 p-4 shadow-sm sticky top-0 z-40">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-black text-blue-800 flex items-center gap-2 cursor-pointer" onclick="location.reload()">
+                <i class="fas fa-graduation-cap"></i> <span id="ui-site-name">...</span>
+            </h1>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-8">
+        
+        <section id="landing" class="view-section hidden space-y-10 py-6">
+            <div class="text-center space-y-4">
+                <h2 class="text-4xl md:text-6xl font-black text-slate-900 leading-tight" id="ui-hero-title">...</h2>
+                <p class="text-slate-500 font-bold text-xl" id="ui-hero-desc">...</p>
+            </div>
+
+            <div id="ui-tutorial-box" class="bg-blue-50 border-r-8 border-blue-600 p-6 rounded-2xl max-w-3xl mx-auto shadow-sm hidden">
+                <h3 class="font-bold text-blue-800 mb-1 flex items-center gap-2"><i class="fas fa-info-circle"></i> تعليمات الطالب:</h3>
+                <p id="ui-tutorial-text" class="text-sm text-slate-600 leading-relaxed"></p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div onclick="app.enterMode('visitor')" class="bg-white p-10 rounded-[2.5rem] shadow-xl border-b-[10px] border-emerald-500 cursor-pointer hover:-translate-y-2 transition-all text-center">
+                    <i class="fas fa-door-open text-5xl text-emerald-500 mb-4"></i>
+                    <h3 class="text-2xl font-black" id="btn-visitor-label">قسم الزوار</h3>
+                    <p class="text-slate-400 font-bold text-xs mt-2">دخول مباشر ومجاني</p>
+                </div>
+                <div onclick="app.openLogin()" class="bg-white p-10 rounded-[2.5rem] shadow-xl border-b-[10px] border-blue-700 cursor-pointer hover:-translate-y-2 transition-all text-center">
+                    <i class="fas fa-user-lock text-5xl text-blue-700 mb-4"></i>
+                    <h3 class="text-2xl font-black" id="btn-sub-label">مشتركين VIP</h3>
+                    <p class="text-slate-400 font-bold text-xs mt-2">يتطلب كود تفعيل خاص</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="dashboard" class="view-section hidden max-w-6xl mx-auto space-y-10">
+            <div class="flex items-center justify-between bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
+                <button onclick="app.showSection('landing')" class="bg-slate-100 px-6 py-2 rounded-xl font-bold text-slate-500 hover:bg-red-50 hover:text-red-600 transition">خروج</button>
+                <div id="mode-title" class="font-black text-blue-600 px-4"></div>
+            </div>
+            <div class="text-center"><h2 class="text-3xl font-black text-slate-800">اختر مادة التخصص</h2></div>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-6">
+                <button onclick="app.selectMajor('لغة عربية')" class="bg-white p-8 rounded-3xl shadow-lg border-b-8 border-emerald-500 hover:-translate-y-2 transition"><i class="fas fa-book-open text-4xl text-emerald-500 mb-4 block"></i><span class="font-black">لغة عربية</span></button>
+                <button onclick="app.selectMajor('رياضيات')" class="bg-white p-8 rounded-3xl shadow-lg border-b-8 border-blue-600 hover:-translate-y-2 transition"><i class="fas fa-calculator text-4xl text-blue-600 mb-4 block"></i><span class="font-black">رياضيات</span></button>
+                <button onclick="app.selectMajor('علوم')" class="bg-white p-8 rounded-3xl shadow-lg border-b-8 border-purple-600 hover:-translate-y-2 transition"><i class="fas fa-flask text-4xl text-purple-600 mb-4 block"></i><span class="font-black">علوم</span></button>
+                <button onclick="app.selectMajor('دراسات')" class="bg-white p-8 rounded-3xl shadow-lg border-b-8 border-amber-500 hover:-translate-y-2 transition"><i class="fas fa-globe-africa text-4xl text-amber-500 mb-4 block"></i><span class="font-black">دراسات</span></button>
+                <button onclick="app.selectMajor('لغة إنجليزية')" class="bg-white p-8 rounded-3xl shadow-lg border-b-8 border-rose-500 hover:-translate-y-2 transition"><i class="fas fa-language text-4xl text-rose-500 mb-4 block"></i><span class="font-black">English</span></button>
+            </div>
+        </section>
+
+        <section id="sub-dashboard" class="view-section hidden max-w-4xl mx-auto space-y-6">
+            <div class="bg-white p-6 rounded-3xl shadow-sm border-t-8 border-blue-800 flex justify-between items-center">
+                <button onclick="app.showSection('dashboard')" class="text-blue-600 font-bold">تغيير المادة</button>
+                <h3 id="current-major-title" class="font-black text-2xl text-slate-900"></h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <button onclick="app.selectMinor('تخصص')" class="col-span-full p-8 bg-slate-900 text-white rounded-3xl shadow-2xl flex justify-between items-center border-r-[12px] border-yellow-400">
+                    <div class="text-right"><h4 class="text-2xl font-black mb-1">بنك أسئلة المادة</h4><p class="opacity-60 text-sm">التدريبات الشاملة للمادة العلمية</p></div>
+                    <i class="fas fa-star text-4xl text-yellow-400"></i>
+                </button>
+                <button onclick="app.selectMinor('تربوي')" class="p-6 bg-white rounded-2xl shadow border-b-4 border-cyan-500 font-black hover:bg-cyan-50 transition">التربوي</button>
+                <button onclick="app.selectMinor('جدارات')" class="p-6 bg-white rounded-2xl shadow border-b-4 border-green-500 font-black hover:bg-green-50 transition">الجدارات</button>
+                <button onclick="app.selectMinor('IQ')" class="p-6 bg-white rounded-2xl shadow border-b-4 border-purple-500 font-black hover:bg-purple-50 transition">IQ والذكاء</button>
+                <button onclick="app.selectMinor('معلومات عامة')" class="p-6 bg-white rounded-2xl shadow border-b-4 border-slate-500 font-black hover:bg-slate-50 transition">معلومات عامة</button>
+            </div>
+        </section>
+
+        <section id="quiz-list" class="view-section hidden max-w-3xl mx-auto space-y-6">
+            <div class="flex justify-between items-center">
+                <button onclick="app.showSection('sub-dashboard')" class="bg-slate-200 px-6 py-2 rounded-2xl font-bold">رجوع</button>
+                <h3 id="quiz-list-title" class="font-black text-xl text-blue-900 border-r-4 border-blue-600 pr-3"></h3>
+            </div>
+            <div id="cat-files-area" class="bg-white p-6 rounded-3xl shadow-sm border border-red-100 hidden">
+                <h4 class="font-black text-red-600 mb-4 flex items-center gap-2"><i class="fas fa-file-pdf"></i> الملفات والملازم المتاحة:</h4>
+                <div id="cat-files-grid" class="grid gap-3 grid-cols-1 md:grid-cols-2"></div>
+            </div>
+            <div id="quizzes-grid" class="space-y-4"></div>
+        </section>
+
+        <section id="exam-player" class="view-section hidden max-w-2xl mx-auto">
+            <div id="exam-header" class="bg-white p-5 rounded-3xl shadow-xl border-t-8 border-blue-600 mb-8 flex justify-between items-center sticky top-24 z-30 transition-all">
+                <div class="space-y-1 w-full">
+                    <div class="flex justify-between mb-2">
+                        <span id="progress-text" class="text-xs font-black text-blue-600"></span>
+                        <button onclick="app.confirmExit()" class="text-xs font-bold text-red-500 uppercase tracking-tighter">إلغاء</button>
+                    </div>
+                    <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="h-full bg-blue-600 progress-bar-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="quiz-content" class="modal-animate">
+                <div id="question-container"></div>
+                <div class="mt-8">
+                    <button id="next-btn" onclick="app.nextQuestion()" class="hidden w-full bg-slate-900 text-white py-5 rounded-[2rem] font-black text-xl shadow-2xl transform active:scale-95 transition">السؤال التالي <i class="fas fa-chevron-left mr-2"></i></button>
+                </div>
+            </div>
+
+            <div id="result-screen" class="hidden modal-animate bg-white p-12 rounded-[3.5rem] shadow-2xl text-center border-t-[14px] border-blue-700">
+                <div id="res-icon-box" class="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                    <i id="res-icon" class="fas text-5xl"></i>
+                </div>
+                <h2 id="res-grade-label" class="text-4xl font-black mb-2 tracking-tight"></h2>
+                <p id="res-pct" class="text-7xl font-black text-slate-900 mb-8"></p>
+                
+                <div class="grid grid-cols-2 gap-4 mb-10 font-black">
+                    <div class="bg-emerald-50 p-5 rounded-[2rem]"><span class="block text-xs text-emerald-600 mb-1">صح</span><span id="stat-correct" class="text-3xl text-emerald-700"></span></div>
+                    <div class="bg-red-50 p-5 rounded-[2rem]"><span class="block text-xs text-red-600 mb-1">خطأ</span><span id="stat-wrong" class="text-3xl text-red-700"></span></div>
+                </div>
+
+                <div id="correction-area" class="hidden text-right space-y-6 mb-10 border-t pt-10">
+                    <h3 class="font-black text-xl flex items-center gap-2"><i class="fas fa-search-plus"></i> مراجعة الإجابات الخاطئة:</h3>
+                    <div id="mistakes-list" class="space-y-4 max-h-[450px] overflow-y-auto pr-2"></div>
+                </div>
+
+                <button onclick="location.reload()" class="w-full bg-slate-900 text-white py-5 rounded-[2.5rem] font-black text-xl hover:bg-black transition shadow-xl">العودة للرئيسية</button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="fixed bottom-0 left-0 right-0 bg-white border-t p-4 z-40 flex justify-between items-center px-10">
+        <div>
+            <span id="ui-footer-text" class="text-[10px] font-bold text-slate-400 block uppercase"></span>
+            <a id="ui-whatsapp-link" href="#" target="_blank" class="text-lg font-black text-emerald-600 flex items-center gap-1">
+                <i class="fab fa-whatsapp"></i> <span id="ui-whatsapp-num"></span>
+            </a>
+        </div>
+        <p class="text-[10px] font-bold text-slate-400">DESIGNED BY MR AHMED EID</p>
+    </footer>
+
+    <div id="login-modal" class="fixed inset-0 bg-slate-900/90 backdrop-blur-md hidden z-[100] flex items-center justify-center p-6 text-center">
+        <div class="bg-white p-10 rounded-[3rem] shadow-2xl max-w-sm w-full modal-animate">
+            <h3 class="text-3xl font-black mb-2" id="ui-login-title">...</h3>
+            <p class="text-slate-400 font-bold mb-8 text-sm leading-relaxed" id="ui-login-desc">...</p>
+            <input type="password" id="user-pass" placeholder="أدخل الكود هنا" class="w-full bg-slate-50 border-2 border-slate-100 p-5 rounded-3xl text-center text-3xl font-black mb-6 focus:border-blue-600 outline-none">
+            <button onclick="app.checkPass()" class="w-full bg-blue-700 text-white py-5 rounded-3xl font-black text-xl shadow-lg">دخول للمنصة</button>
+            <button onclick="document.getElementById('login-modal').classList.add('hidden')" class="mt-4 text-slate-400 font-bold">إلغاء</button>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDvFOWeYV2grWux_Z-nl3uFiTR2Jd9UlvE",
+            authDomain: "tgrep-11831.firebaseapp.com",
+            databaseURL: "https://tgrep-11831-default-rtdb.firebaseio.com",
+            projectId: "tgrep-11831",
+            storageBucket: "tgrep-11831.firebasestorage.app",
+            messagingSenderId: "129365723816",
+            appId: "1:129365723816:web:be1fb88079c9a38ac2d09d"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        let db = { quizzes: [], files: [], settings: {} };
+        let state = { mode: 'visitor', major: '', minor: '', quiz: null, score: 0, mistakes: [], currentQIndex: 0 };
+        const sounds = { correct: document.getElementById('s-correct'), wrong: document.getElementById('s-wrong'), clap: document.getElementById('s-clap') };
+
+        const app = {
+            applySettings: () => {
+                const s = db.settings || {};
+                document.getElementById('ui-site-name').innerText = s.siteName || "المنصة التعليمية";
+                document.getElementById('page-title').innerText = s.siteName || "المنصة التعليمية";
+                document.getElementById('ui-hero-title').innerText = s.heroTitle || "أهلاً بك";
+                document.getElementById('ui-hero-desc').innerText = s.heroDesc || "تعلم معنا بذكاء";
+                document.getElementById('ui-footer-text').innerText = s.footerText || "للاشتراك:";
+                document.getElementById('ui-whatsapp-num').innerText = s.whatsapp || "01126874320";
+                document.getElementById('ui-whatsapp-link').href = `https://wa.me/${s.whatsapp || '01126874320'}`;
+                document.getElementById('ui-login-title').innerText = s.subscriberTitle || "دخول المشتركين";
+                document.getElementById('ui-login-desc').innerText = s.subscriberMsg || "أدخل الكود الخاص بك للدخول للمحتوى الحصري";
+                document.getElementById('btn-visitor-label').innerText = s.btnVisitorText || "قسم الزوار";
+                document.getElementById('btn-sub-label').innerText = s.btnSubText || "مشتركين VIP";
+                const tutBox = document.getElementById('ui-tutorial-box');
+                if(s.tutorialText) { tutBox.classList.remove('hidden'); document.getElementById('ui-tutorial-text').innerText = s.tutorialText; }
+                const banner = document.getElementById('app-banner');
+                if(s.appLink) { banner.classList.remove('hidden'); document.getElementById('ui-app-text').innerText = s.appText || "حمل تطبيقنا الآن!"; document.getElementById('ui-app-link').href = s.appLink; }
+            },
+            showSection: (id) => { document.querySelectorAll('.view-section').forEach(s => s.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); window.scrollTo(0,0); },
+            openLogin: () => document.getElementById('login-modal').classList.remove('hidden'),
+            checkPass: () => { 
+                if(document.getElementById('user-pass').value === (db.settings.accessCode || '123')) {
+                    document.getElementById('login-modal').classList.add('hidden');
+                    app.enterMode('subscriber');
+                } else alert("الكود غير صحيح");
+            },
+            enterMode: (m) => { state.mode = m; document.getElementById('mode-title').innerText = m === 'visitor' ? 'دخول مجاني' : 'عضوية مميزة'; app.showSection('dashboard'); },
+            selectMajor: (maj) => { state.major = maj; document.getElementById('current-major-title').innerText = maj; app.showSection('sub-dashboard'); },
+            selectMinor: (min) => {
+                state.minor = min;
+                document.getElementById('quiz-list-title').innerText = min === 'تخصص' ? "أسئلة " + state.major : min;
+                const isUniversal = ['تربوي', 'جدارات', 'IQ', 'عربي عام', 'انجليزي عام', 'معلومات عامة'].includes(min);
+                const quizGrid = document.getElementById('quizzes-grid');
+                let qs = (db.quizzes || []).filter(q => (state.mode === 'subscriber' || q.mode === 'visitor') && (q.minor === min) && (isUniversal ? (q.major === 'Universal' || q.major === state.major) : q.major === state.major));
+                quizGrid.innerHTML = qs.length ? qs.map(q => `<div onclick="app.startQuiz(${q.id})" class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex justify-between items-center hover:shadow-lg transition cursor-pointer"><div><h4 class="font-black text-slate-800">${q.name}</h4><p class="text-xs text-slate-400 font-bold">${q.questions?.length || 0} سؤال</p></div><div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center shadow-inner"><i class="fas fa-play text-xs"></i></div></div>`).join('') : '<p class="text-center font-bold text-slate-300 py-10">لا يوجد محتوى حالياً في هذا القسم</p>';
+                const fileArea = document.getElementById('cat-files-area');
+                let fs = (db.files || []).filter(f => (state.mode === 'subscriber' || f.mode === 'visitor') && (f.minor === min) && (isUniversal ? (f.major === 'Universal' || f.major === state.major) : f.major === state.major));
+                if(fs.length) { fileArea.classList.remove('hidden'); document.getElementById('cat-files-grid').innerHTML = fs.map(f => `<a href="${f.url}" target="_blank" class="flex justify-between bg-red-50 p-4 rounded-2xl items-center border border-red-100"><span class="font-bold text-sm text-red-700 truncate w-3/4"><i class="fas fa-file-pdf ml-2"></i>${f.name}</span><i class="fas fa-download text-xs text-red-300"></i></a>`).join(''); } else fileArea.classList.add('hidden');
+                app.showSection('quiz-list');
+            },
+            startQuiz: (id) => {
+                state.quiz = db.quizzes.find(q => q.id === id);
+                if(!state.quiz.questions?.length) return alert("هذا الاختبار لا يحتوي على أسئلة حالياً.");
+                state.score = 0; state.mistakes = []; state.currentQIndex = 0;
+                document.getElementById('exam-header').classList.remove('hidden');
+                document.getElementById('result-screen').classList.add('hidden');
+                document.getElementById('quiz-content').classList.remove('hidden');
+                app.renderQuestion();
+                app.showSection('exam-player');
+            },
+            renderQuestion: () => {
+                const q = state.quiz.questions[state.currentQIndex];
+                const total = state.quiz.questions.length;
+                const pct = ((state.currentQIndex + 1) / total) * 100;
+                document.getElementById('progress-bar').style.width = pct + '%';
+                document.getElementById('progress-text').innerText = `سؤال ${state.currentQIndex + 1} من ${total}`;
+                document.getElementById('next-btn').classList.add('hidden');
+                const container = document.getElementById('question-container');
+                container.innerHTML = `
+                    <div class="bg-white p-10 rounded-[3rem] shadow-xl space-y-8 border border-slate-50">
+                        <div class="flex justify-between items-start gap-4">
+                            <h5 class="text-2xl font-black leading-snug text-slate-800">${q.text}</h5>
+                            ${q.hint ? `<button onclick="alert('تلميح: ${q.hint}')" class="flex-shrink-0 w-12 h-12 bg-yellow-50 text-yellow-600 rounded-2xl flex items-center justify-center shadow-sm"><i class="fas fa-lightbulb"></i></button>` : ''}
+                        </div>
+                        <div id="opts-container" class="grid grid-cols-1 gap-4">
+                            ${q.opts.map((o, i) => `<button onclick="app.checkAns(this, ${q.correctAnswer}, ${i})" class="opt-btn">${o}</button>`).join('')}
+                        </div>
+                    </div>
+                `;
+            },
+            checkAns: (btn, correctIdx, selectedIdx) => {
+                const q = state.quiz.questions[state.currentQIndex];
+                const btns = document.querySelectorAll('.opt-btn');
+                btns.forEach(b => { b.disabled = true; b.style.opacity = '0.6'; });
+                btn.style.opacity = '1';
+                
+                if(selectedIdx === correctIdx) {
+                    btn.classList.add('correct-ans');
+                    sounds.correct.play();
+                    state.score++;
+                } else {
+                    btn.classList.add('wrong-ans');
+                    btns[correctIdx].style.opacity = '1';
+                    btns[correctIdx].classList.add('correct-ans');
+                    sounds.wrong.play();
+                    state.mistakes.push({ q: q.text, wrong: q.opts[selectedIdx], correct: q.opts[correctIdx] });
+                }
+                
+                // الانتقال التلقائي بعد 1.5 ثانية
+                setTimeout(() => {
+                    if(state.currentQIndex < state.quiz.questions.length - 1) {
+                        state.currentQIndex++;
+                        app.renderQuestion();
+                    } else app.finishExam();
+                }, 1500);
+            },
+            confirmExit: () => { if(confirm("هل أنت متأكد من إنهاء الاختبار؟")) location.reload(); },
+            finishExam: () => {
+                const total = state.quiz.questions.length;
+                const scorePct = Math.round((state.score / total) * 100);
+                document.getElementById('quiz-content').classList.add('hidden');
+                document.getElementById('exam-header').classList.add('hidden');
+                document.getElementById('result-screen').classList.remove('hidden');
+                
+                let grade = ""; let color = ""; let icon = "";
+                if(scorePct >= 90) { grade = "ممتاز بطل!"; color = "bg-emerald-500 text-white"; icon = "fa-crown"; sounds.clap.play(); }
+                else if(scorePct >= 75) { grade = "جيد جداً، أحسنت"; color = "bg-blue-600 text-white"; icon = "fa-star"; sounds.clap.play(); }
+                else if(scorePct >= 65) { grade = "جيد، يمكنك الأفضل"; color = "bg-yellow-500 text-white"; icon = "fa-thumbs-up"; }
+                else if(scorePct >= 50) { grade = "مقبول، استمر في المذاكرة"; color = "bg-orange-500 text-white"; icon = "fa-check"; }
+                else { grade = "ضعيف، راجع دروسك جيداً"; color = "bg-red-500 text-white"; icon = "fa-book-open"; }
+
+                document.getElementById('res-grade-label').innerText = grade;
+                document.getElementById('res-pct').innerText = scorePct + "%";
+                document.getElementById('res-icon-box').className = `w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg ${color}`;
+                document.getElementById('res-icon').className = `fas ${icon} text-5xl`;
+                document.getElementById('stat-correct').innerText = state.score;
+                document.getElementById('stat-wrong').innerText = total - state.score;
+
+                const mistCont = document.getElementById('mistakes-list');
+                const mistSect = document.getElementById('correction-area');
+                mistCont.innerHTML = "";
+                if(state.mistakes.length) {
+                    mistSect.classList.remove('hidden');
+                    state.mistakes.forEach(m => {
+                        mistCont.innerHTML += `
+                            <div class="bg-slate-50 p-6 rounded-[2rem] border border-slate-200 text-right">
+                                <p class="font-black text-slate-800 mb-4 leading-relaxed">${m.q}</p>
+                                <div class="grid grid-cols-1 gap-2">
+                                    <div class="bg-red-100 text-red-700 p-3 rounded-xl text-xs font-bold">إجابتك: ${m.wrong}</div>
+                                    <div class="bg-emerald-100 text-emerald-700 p-3 rounded-xl text-xs font-black">الإجابة الصحيحة: ${m.correct}</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else mistSect.classList.add('hidden');
+                window.scrollTo(0,0);
+            },
+        };
+
+        database.ref('edu_platform_data').on('value', (snap) => {
+            document.getElementById('loading-screen').classList.add('hidden');
+            if(snap.val()) db = snap.val();
+            app.applySettings();
+            app.showSection('landing');
+        });
+    </script>
+
+</body></html>
