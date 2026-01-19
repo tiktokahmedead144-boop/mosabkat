@@ -182,7 +182,16 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         let db = { quizzes: [], files: [], simulations: [], settings: {} };
-        let state = { isVIP: false, major: '', minor: '', quiz: null, score: 0, qIdx: 0, timerInterval: null };
+        let state = { 
+            isVIP: false, 
+            major: '', 
+            minor: '', 
+            quiz: null, 
+            score: 0, 
+            qIdx: 0, 
+            timerInterval: null,
+            pendingAction: null // لتذكر الإجراء المعلق (مثل فتح اختبار مغلق)
+        };
 
         const app = {
             init: () => {
@@ -202,7 +211,7 @@
                 for(let k in els) if(document.getElementById(k)) document.getElementById(k).innerText = els[k] || "";
                 document.getElementById('phone-link').href = `https://wa.me/${s.whatsapp}`;
                 
-                // Fix for Tutorials Visibility
+                // Show Tutorials correctly
                 if(s.tutorialText && s.tutorialText.trim() !== "") {
                     document.getElementById('ui-tutorial-box').classList.remove('hidden');
                     document.getElementById('ui-tutorial-text').innerText = s.tutorialText;
@@ -213,7 +222,14 @@
                 if(s.extLinkUrl) { document.getElementById('ui-ext-link-area').classList.remove('hidden'); document.getElementById('ui-ext-link').href = s.extLinkUrl; }
                 if(s.appLink) { document.getElementById('app-banner').classList.remove('hidden'); document.getElementById('ui-app-link').href = s.appLink; }
                 
-                // Render Simulations List
+                app.renderSims(); // Helper to render simulations
+                
+                // Only go to landing if not already deep in the app
+                if(document.querySelectorAll('.view-section.hidden').length === document.querySelectorAll('.view-section').length) {
+                    app.showSection('landing');
+                }
+            },
+            renderSims: () => {
                 const simList = document.getElementById('simulations-list');
                 simList.innerHTML = "";
                 if(db.simulations && db.simulations.length) {
@@ -231,18 +247,44 @@
                         </div>`;
                     });
                 }
-                app.showSection('landing');
             },
             showSection: (id) => { document.querySelectorAll('.view-section').forEach(e=>e.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); window.scrollTo(0,0); },
-            enterVisitor: () => { state.isVIP = false; app.updateStatus(); app.showSection('dashboard'); },
-            enterSubscriber: () => document.getElementById('password-modal').classList.remove('hidden'),
+            enterVisitor: () => { 
+                state.isVIP = false; 
+                app.updateStatus(); 
+                app.showSection('dashboard'); 
+            },
+            enterSubscriber: () => {
+                state.pendingAction = null; // Reset pending action on direct login
+                document.getElementById('password-modal').classList.remove('hidden');
+            },
             checkPassword: () => {
-                if(document.getElementById('user-pass').value === (db.settings.accessCode || "123")) {
-                    state.isVIP = true; document.getElementById('password-modal').classList.add('hidden');
-                    app.updateStatus(); alert("تم التفعيل ✅"); app.showSection('dashboard');
-                    if(!document.getElementById('content-list').classList.contains('hidden')) app.selectMinor(state.minor);
-                    app.renderUI(); 
-                } else alert("كود خطأ");
+                const input = document.getElementById('user-pass').value;
+                const correct = db.settings.accessCode || "123";
+                
+                if(input === correct) {
+                    state.isVIP = true;
+                    document.getElementById('password-modal').classList.add('hidden');
+                    app.updateStatus();
+                    alert("تم تفعيل الاشتراك بنجاح! 🔓");
+                    
+                    // Re-render UI components to remove locks visual
+                    app.renderSims();
+                    if(!document.getElementById('content-list').classList.contains('hidden')) {
+                         app.selectMinor(state.minor);
+                    }
+
+                    // EXECUTE PENDING ACTION OR GO TO DASHBOARD
+                    if(state.pendingAction) {
+                        state.pendingAction();
+                        state.pendingAction = null;
+                    } else {
+                        app.showSection('dashboard');
+                    }
+
+                } else {
+                    alert("كلمة المرور غير صحيحة");
+                }
             },
             updateStatus: () => document.getElementById('user-status').innerText = state.isVIP ? "مشترك VIP 👑" : "زائر (محدود)",
             selectMajor: (m) => { state.major = m; if(m==='Competition') app.selectMinor('ملفات'); else app.showSection('sub-dashboard'); },
@@ -287,17 +329,32 @@
                 }
                 app.showSection('content-list');
             },
-            openFile: (url, locked) => locked ? document.getElementById('password-modal').classList.remove('hidden') : window.open(url, '_blank'),
+            openFile: (url, locked) => {
+                if(locked) {
+                    state.pendingAction = () => window.open(url, '_blank');
+                    document.getElementById('password-modal').classList.remove('hidden');
+                } else {
+                    window.open(url, '_blank');
+                }
+            },
             startQuiz: (id, locked) => {
-                if(locked) return document.getElementById('password-modal').classList.remove('hidden');
+                if(locked) {
+                    state.pendingAction = () => app.startQuiz(id, false);
+                    document.getElementById('password-modal').classList.remove('hidden');
+                    return;
+                }
                 const q = db.quizzes.find(x => x.id === id);
-                if(!q.questions || !q.questions.length) return alert("فارغ");
+                if(!q.questions || !q.questions.length) return alert("الاختبار فارغ");
                 state.quiz = q; state.score = 0; state.qIdx = 0;
                 document.getElementById('timer-display').classList.add('hidden');
                 app.showSection('exam-player'); app.renderQ();
             },
             startSimulation: (id, locked) => {
-                if(locked) return document.getElementById('password-modal').classList.remove('hidden');
+                if(locked) {
+                    state.pendingAction = () => app.startSimulation(id, false);
+                    document.getElementById('password-modal').classList.remove('hidden');
+                    return;
+                }
                 const sim = db.simulations.find(x => x.id === id);
                 if(!sim) return;
                 
@@ -316,7 +373,7 @@
                     if(pool[key]) finalQs.push(...shuffle(pool[key]).slice(0, sim.counts[k]||0));
                 });
                 
-                if(!finalQs.length) return alert("لا توجد أسئلة كافية");
+                if(!finalQs.length) return alert("لا توجد أسئلة كافية لإنشاء هذا المحاكي");
                 state.quiz = { questions: shuffle(finalQs) }; state.score = 0; state.qIdx = 0;
                 app.startTimer(sim.time);
                 app.showSection('exam-player'); app.renderQ();
