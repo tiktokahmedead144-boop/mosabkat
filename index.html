@@ -3,7 +3,7 @@
  <head> 
   <meta charset="UTF-8"> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-  <title>المنصة التعليمية</title> 
+  <title>المنصة التعليمية | لغتي هويتي</title> 
   <script src="https://cdn.tailwindcss.com"></script> 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> 
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script> 
@@ -20,13 +20,8 @@
         .opt-btn:hover:not(:disabled) { border-color: #10b981; background: #ecfdf5; }
         .correct { background: #d1fae5 !important; border-color: #10b981 !important; color: #065f46; }
         .wrong { background: #fee2e2 !important; border-color: #ef4444 !important; color: #991b1b; }
-        
-        #toast-notification {
-            transform: translateY(-150%);
-            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-        }
+        #toast-notification { transform: translateY(-150%); transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
         #toast-notification.show { transform: translateY(0); }
-        
         .review-card.correct-ans { border-right: 6px solid #10b981; background: #f0fdf4; }
         .review-card.wrong-ans { border-right: 6px solid #ef4444; background: #fef2f2; }
     </style> 
@@ -86,7 +81,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"> <button onclick="app.selectMinor('تخصص')" class="md:col-span-2 lg:col-span-3 p-8 bg-slate-800 text-white rounded-3xl shadow-xl border-r-[8px] border-yellow-400 flex justify-between items-center hover:bg-slate-900 transition-all"> 
       <div class="text-right"> 
        <h4 class="text-2xl font-black mb-1">أسئلة التخصص</h4> 
-      </div><i class="fas fa-star text-4xl text-yellow-400"></i> </button> <button onclick="app.selectMinor('تربوي')" class="p-5 bg-white rounded-2xl shadow font-bold hover:bg-slate-50">التربوي</button> <button onclick="app.selectMinor('جدارات')" class="p-5 bg-white rounded-2xl shadow font-bold hover:bg-slate-50">الجدارات</button> <button onclick="app.selectMinor('IQ')" class="p-5 bg-white rounded-2xl shadow font-bold hover:bg-slate-50">IQ والذكاء</button> <button onclick="app.selectMinor('عربي للجميع')" class="p-5 bg-white rounded-2xl shadow font-bold hover:bg-slate-50">عربي للجميع</button> <button onclick="app.selectMinor('انجليزي للجميع')" class="p-5 bg-white rounded-2xl shadow font-bold hover:bg-slate-50">انجليزي للجميع</button> <button onclick="app.selectMinor('معلومات عامة')" class="p-5 bg-white rounded-2xl shadow font-bold hover:bg-slate-50">معلومات عامة</button> 
+      </div><i class="fas fa-star text-4xl text-yellow-400"></i> </button> <button onclick="app.selectMinor('تربوي')" class="p-5 bg-white rounded-2xl shadow font-bold hover:bg-slate-50">التربوي</button> <button onclick="app.selectMinor('جدارات')" class="p-5 bg-white rounded-2xl shadow font-bold hover:bg-slate-50">الجدارات</button> <button onclick="app.selectMinor('IQ')" class="p-5 bg-white rounded-2xl shadow font-bold hover:bg-slate-50">IQ والذكاء</button> <button onclick="app.selectMinor('عربي للجميع')" class="p-5 bg-white rounded-2xl shadow font-bold hover:bg-slate-50">عربي للجميع</button> <button onclick="app.selectMinor('انجليزي للجميع')" class="p-5 bg-white rounded-2xl shadow font-bold hover:bg-slate-50">انجليزي للجميع</button> <button onclick="app.selectMinor('حاسب آلي')" class="p-5 bg-white rounded-2xl shadow font-bold hover:bg-slate-50 text-blue-700">حاسب آلي</button> <button onclick="app.selectMinor('معلومات عامة')" class="p-5 bg-white rounded-2xl shadow font-bold hover:bg-slate-50">معلومات عامة</button> 
     </div> 
    </section> 
    <section id="content-list" class="view-section hidden space-y-8"> 
@@ -157,7 +152,7 @@
             qIdx: 0, 
             timerInterval: null,
             pendingAction: null,
-            answers: [] // لتخزين إجابات المستخدم
+            answers: [] 
         };
 
         const app = {
@@ -187,22 +182,15 @@
                 };
                 for(let k in els) if(document.getElementById(k)) document.getElementById(k).innerText = els[k] || "";
                 document.getElementById('phone-link').href = `https://wa.me/${s.whatsapp}`;
-                
                 if(s.tutorialText && s.tutorialText.trim() !== "") {
                     document.getElementById('ui-tutorial-box').classList.remove('hidden');
                     document.getElementById('ui-tutorial-text').innerText = s.tutorialText;
-                } else {
-                    document.getElementById('ui-tutorial-box').classList.add('hidden');
-                }
+                } else document.getElementById('ui-tutorial-box').classList.add('hidden');
 
                 if(s.extLinkUrl) { document.getElementById('ui-ext-link-area').classList.remove('hidden'); document.getElementById('ui-ext-link').href = s.extLinkUrl; }
                 if(s.appLink) { document.getElementById('app-banner').classList.remove('hidden'); document.getElementById('ui-app-link').href = s.appLink; }
-                
                 app.renderSims();
-                
-                if(document.querySelectorAll('.view-section.hidden').length === document.querySelectorAll('.view-section').length) {
-                    app.showSection('landing');
-                }
+                if(document.querySelectorAll('.view-section.hidden').length === document.querySelectorAll('.view-section').length) app.showSection('landing');
             },
             renderSims: () => {
                 const simList = document.getElementById('simulations-list');
@@ -245,7 +233,7 @@
             selectMajor: (m) => { state.major = m; if(m==='Competition') app.selectMinor('ملفات'); else app.showSection('sub-dashboard'); },
             selectMinor: (m) => {
                 state.minor = m; document.getElementById('list-title').innerText = m === 'تخصص' ? `تخصص ${state.major}` : m;
-                const isUniversal = ['تربوي', 'جدارات', 'IQ', 'عربي للجميع', 'انجليزي للجميع', 'معلومات عامة'].includes(m);
+                const isUniversal = ['تربوي', 'جدارات', 'IQ', 'عربي للجميع', 'انجليزي للجميع', 'حاسب آلي', 'معلومات عامة'].includes(m);
                 const files = (db.files||[]).filter(f => {
                     if(state.major==='Competition') return f.major==='Competition';
                     if(isUniversal) return f.minor===m;
@@ -285,75 +273,42 @@
                 if(locked) { state.pendingAction = () => app.startQuiz(id, false); document.getElementById('password-modal').classList.remove('hidden'); return; }
                 const q = db.quizzes.find(x => x.id === id);
                 if(!q.questions || !q.questions.length) return app.notify("الاختبار فارغ", "error");
-                state.quiz = { 
-                    questions: q.questions.map(qt => ({...qt, categoryName: q.name})) 
-                }; 
+                state.quiz = { questions: q.questions.map(qt => ({...qt, categoryName: q.name})) }; 
                 state.score = 0; state.qIdx = 0; state.answers = new Array(q.questions.length).fill(null);
                 document.getElementById('timer-display').classList.add('hidden');
                 app.showSection('exam-player'); app.renderQ();
             },
-            
-            // --- SIMULATION LOGIC START ---
             startSimulation: (id, locked) => {
                 if(locked) { state.pendingAction = () => app.startSimulation(id, false); document.getElementById('password-modal').classList.remove('hidden'); return; }
                 const sim = db.simulations.find(x => x.id === id);
                 if(!sim) return;
-                
-                // تجميع كل الأسئلة في الذاكرة
                 let allQs = db.quizzes || [];
-                
-                // دالة مساعدة لجلب أسئلة تصنيف معين وخلطها
                 const getPool = (majorFilter, minorFilter, count, label) => {
                     let pool = [];
                     allQs.forEach(q => {
-                        // شرط التخصص: إذا كان مطلوب تخصص محدد، أو إذا كانت عامة
                         let matchMajor = majorFilter ? q.major === majorFilter : true;
                         let matchMinor = q.minor === minorFilter;
-                        
-                        if(matchMajor && matchMinor && q.questions) {
-                            pool.push(...q.questions);
-                        }
+                        if(matchMajor && matchMinor && q.questions) pool.push(...q.questions);
                     });
-                    
-                    // خلط الأسئلة في هذا التصنيف
                     pool.sort(() => 0.5 - Math.random());
-                    
-                    // أخذ العدد المطلوب فقط وإضافة اسم القسم للسؤال
-                    return pool.slice(0, count).map(q => ({
-                        ...q,
-                        categoryName: label
-                    }));
+                    return pool.slice(0, count).map(q => ({ ...q, categoryName: label }));
                 };
 
-                // بناء الاختبار بالترتيب المطلوب
                 let finalQuestions = [];
-                
-                // 1. التخصص (يأخذ من تخصص المحاكي المحدد)
-                if(sim.targetMajor) {
-                    finalQuestions.push(...getPool(sim.targetMajor, 'تخصص', sim.counts.spec, `تخصص: ${sim.targetMajor}`));
-                }
-                
-                // 2. باقي الأقسام بالترتيب
+                if(sim.targetMajor) finalQuestions.push(...getPool(sim.targetMajor, 'تخصص', sim.counts.spec, `تخصص: ${sim.targetMajor}`));
                 finalQuestions.push(...getPool(null, 'تربوي', sim.counts.ped, 'أسئلة تربوية'));
                 finalQuestions.push(...getPool(null, 'جدارات', sim.counts.comp, 'الجدارات السلوكية'));
                 finalQuestions.push(...getPool(null, 'IQ', sim.counts.iq, 'IQ والذكاء'));
                 finalQuestions.push(...getPool(null, 'عربي للجميع', sim.counts.ar, 'لغة عربية (عام)'));
                 finalQuestions.push(...getPool(null, 'انجليزي للجميع', sim.counts.en, 'لغة إنجليزية (عام)'));
+                finalQuestions.push(...getPool(null, 'حاسب آلي', sim.counts.cs, 'حاسب آلي'));
                 finalQuestions.push(...getPool(null, 'معلومات عامة', sim.counts.gen, 'معلومات عامة'));
                 
                 if(!finalQuestions.length) return app.notify("لا توجد أسئلة كافية لإنشاء هذا المحاكي", "error");
-                
-                state.quiz = { questions: finalQuestions }; 
-                state.score = 0; 
-                state.qIdx = 0; 
-                state.answers = new Array(finalQuestions.length).fill(null);
-                
+                state.quiz = { questions: finalQuestions }; state.score = 0; state.qIdx = 0; state.answers = new Array(finalQuestions.length).fill(null);
                 app.startTimer(sim.time);
-                app.showSection('exam-player'); 
-                app.renderQ();
+                app.showSection('exam-player'); app.renderQ();
             },
-            // --- SIMULATION LOGIC END ---
-
             startTimer: (min) => {
                 const d = document.getElementById('timer-display'); d.classList.remove('hidden');
                 let t = min * 60;
@@ -369,7 +324,6 @@
                 const q = state.quiz.questions[state.qIdx];
                 document.getElementById('progress-text').innerText = `${state.qIdx+1}/${state.quiz.questions.length}`;
                 document.getElementById('progress-bar').style.width = ((state.qIdx+1)/state.quiz.questions.length*100)+"%";
-                
                 document.getElementById('question-box').innerHTML = `
                 <div class="bg-white p-6 rounded-[2.5rem] shadow-xl space-y-4">
                     <div class="flex justify-between items-center border-b pb-2">
@@ -383,57 +337,37 @@
             },
             ans: (i, btn) => {
                 const q = state.quiz.questions[state.qIdx];
-                state.answers[state.qIdx] = i; // حفظ إجابة المستخدم
-                
+                state.answers[state.qIdx] = i;
                 document.querySelectorAll('.opt-btn').forEach(b=>b.disabled=true);
-                if(i === parseInt(q.correctAnswer)) { 
-                    btn.classList.add('correct'); 
-                    state.score++; 
-                } else { 
-                    btn.classList.add('wrong'); 
-                    document.querySelectorAll('.opt-btn')[parseInt(q.correctAnswer)].classList.add('correct'); 
-                }
+                if(i === parseInt(q.correctAnswer)) { btn.classList.add('correct'); state.score++; }
+                else { btn.classList.add('wrong'); document.querySelectorAll('.opt-btn')[parseInt(q.correctAnswer)].classList.add('correct'); }
                 setTimeout(() => { if(++state.qIdx < state.quiz.questions.length) app.renderQ(); else app.finishExam(); }, 1000);
             },
             finishExam: () => {
                 if(state.timerInterval) clearInterval(state.timerInterval);
                 document.getElementById('question-box').classList.add('hidden');
                 document.getElementById('result-box').classList.remove('hidden');
-                
                 const percentage = Math.round(state.score/state.quiz.questions.length*100);
                 document.getElementById('res-score').innerText = percentage + "%";
-                
-                // رسالة المستوى
-                let msg = "";
-                if(percentage >= 90) msg = "ممتاز! مستوى رائع جداً 🌟";
-                else if(percentage >= 75) msg = "جيد جداً! استمر في التقدم 💪";
-                else if(percentage >= 50) msg = "جيد، لكن تحتاج للمزيد من المراجعة 👍";
-                else msg = "للأسف، تحتاج لمذاكرة مكثفة لتحسين مستواك 📚";
+                let msg = percentage >= 90 ? "ممتاز! مستوى رائع جداً 🌟" : percentage >= 75 ? "جيد جداً! استمر في التقدم 💪" : percentage >= 50 ? "جيد، لكن تحتاج للمزيد من المراجعة 👍" : "تحتاج لمذاكرة مكثفة لتحسين مستواك 📚";
                 document.getElementById('res-msg').innerText = msg;
-
-                // بناء قائمة المراجعة
                 const reviewList = document.getElementById('review-list');
                 reviewList.innerHTML = state.quiz.questions.map((q, idx) => {
                     const userAnsIdx = state.answers[idx];
-                    const correctIdx = q.correctAnswer;
-                    const isCorrect = userAnsIdx === correctIdx;
-                    const userAnsText = userAnsIdx !== null ? q.opts[userAnsIdx] : "لم يتم الاختيار";
-                    const correctAnsText = q.opts[correctIdx];
-
+                    const isCorrect = userAnsIdx === q.correctAnswer;
                     return `
                     <div class="review-card p-4 rounded-2xl shadow-sm text-right ${isCorrect ? 'correct-ans' : 'wrong-ans'}">
                         <span class="text-[10px] font-bold text-slate-400 block mb-1">${q.categoryName}</span>
                         <p class="font-bold text-slate-800 mb-2 text-sm">${idx+1}. ${q.text}</p>
                         <div class="text-xs space-y-1">
                             <p class="${isCorrect ? 'text-green-700' : 'text-red-600'} font-bold">
-                                <span class="opacity-70">إجابتك:</span> ${userAnsText} 
+                                <span class="opacity-70">إجابتك:</span> ${userAnsIdx !== null ? q.opts[userAnsIdx] : "لم يتم الاختيار"} 
                                 ${isCorrect ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-times-circle"></i>'}
                             </p>
-                            ${!isCorrect ? `<p class="text-green-700 font-bold"><span class="opacity-70">الصحيحة:</span> ${correctAnsText}</p>` : ''}
+                            ${!isCorrect ? `<p class="text-green-700 font-bold"><span class="opacity-70">الصحيحة:</span> ${q.opts[q.correctAnswer]}</p>` : ''}
                         </div>
                     </div>`;
                 }).join('');
-                
                 window.scrollTo(0,0);
             }
         };
