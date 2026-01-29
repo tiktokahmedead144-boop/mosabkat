@@ -3,8 +3,7 @@
  <head> 
   <meta charset="UTF-8"> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-  <title> منصة إجتاز التعليمية | لمسابقات التنظيم والإدارة الطالب </title> 
-  
+  <title> منصة اجتاز التعليمية | مسابقات التنظيم والإدارة </title> 
   <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script> 
   <script>
         tailwind.config = {
@@ -36,284 +35,146 @@
             }
         }
     </script> 
-  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> 
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&amp;display=swap" rel="stylesheet"> 
-  
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script> 
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
-  
   <style>
         body { font-family: 'Cairo', sans-serif; background-color: #f4f7f6; user-select: none; -webkit-user-select: none; }
-        
         .hidden { display: none !important; }
         .modal-animate { animation: slideUp 0.4s ease-out; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        
         .locked-item { opacity: 0.7; filter: grayscale(90%); cursor: not-allowed; position: relative; transition: all 0.3s; }
         .locked-item:hover { transform: none !important; }
         .locked-item::after { content: '\f023'; font-family: "Font Awesome 6 Free"; font-weight: 900; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); font-size: 2rem; color: #ef4444; background: rgba(255,255,255,0.9); padding: 15px; border-radius: 50%; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        
         .opt-btn { width: 100%; padding: 1.25rem; border: 2px solid #e2e8f0; border-radius: 1rem; font-weight: bold; transition: all 0.2s; background: white; text-align: right; position: relative; overflow: hidden; }
         .opt-btn:hover:not(:disabled) { border-color: #22c55e; background: #f0fdf4; }
         .correct { background: #d1fae5 !important; border-color: #10b981 !important; color: #065f46; }
         .wrong { background: #fee2e2 !important; border-color: #ef4444 !important; color: #991b1b; }
-        
-        #toast-notification { 
-            position: fixed; 
-            top: 20px; 
-            left: 50%; 
-            transform: translate(-50%, -200%); 
-            z-index: 99999; 
-            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 16px 30px;
-            border-radius: 20px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-            color: white;
-            font-weight: bold;
-            min-width: 320px;
-            justify-content: center;
-            font-size: 1.1rem;
-            backdrop-filter: blur(5px);
-        }
-        #toast-notification.show { 
-            transform: translate(-50%, 0); 
-        }
-        
+        #toast-notification { position: fixed; top: 20px; left: 50%; transform: translate(-50%, -200%); z-index: 99999; transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); display: flex; align-items: center; gap: 12px; padding: 16px 30px; border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.15); color: white; font-weight: bold; min-width: 320px; justify-content: center; font-size: 1.1rem; backdrop-filter: blur(5px); }
+        #toast-notification.show { transform: translate(-50%, 0); }
         .review-card.correct-ans { border-right: 6px solid #10b981; background: #f0fdf4; }
         .review-card.wrong-ans { border-right: 6px solid #ef4444; background: #fef2f2; }
-
-        .contact-float {
-            position: fixed;
-            bottom: 25px;
-            left: 25px;
-            z-index: 50;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .contact-btn {
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            color: white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .contact-btn:hover {
-            transform: scale(1.1) translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-        }
+        .contact-float { position: fixed; bottom: 25px; left: 25px; z-index: 50; display: flex; flex-direction: column; gap: 12px; }
+        .contact-btn { width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55); cursor: pointer; text-decoration: none; }
+        .contact-btn:hover { transform: scale(1.1) translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
         .whatsapp-float { background-color: #25D366; }
         .telegram-float { background-color: #0088cc; }
     </style> 
  </head> 
  <body class="text-slate-800 pb-24" oncontextmenu="return false;"> 
-  
-  <div id="toast-notification" class="bg-slate-800"> 
-      <i id="toast-icon" class="text-2xl"></i> 
-      <span id="toast-msg"></span> 
+  <div id="toast-notification" class="bg-slate-800"> <i id="toast-icon" class="text-2xl"></i> <span id="toast-msg"></span> 
   </div> 
-
-  <div id="custom-alert-modal" class="fixed inset-0 bg-slate-900/95 backdrop-blur z-[200] hidden flex items-center justify-center p-6">
-      <div class="bg-white p-8 rounded-[2rem] shadow-2xl w-full max-w-sm text-center animate-bounce-in border-4 border-red-100 relative">
-          <div class="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
-              <i class="fas fa-user-shield text-5xl text-red-500"></i>
-          </div>
-          <h3 class="text-2xl font-black text-slate-800 mb-2">تنبيه أمني</h3>
-          <p id="custom-alert-msg" class="text-slate-500 font-bold mb-8 leading-relaxed text-sm"></p>
-          <button onclick="location.reload()" class="w-full bg-slate-800 text-white py-4 rounded-xl font-black shadow-lg hover:bg-slate-900 transition-all transform hover:scale-[1.02]">
-              <i class="fas fa-redo ml-2"></i> إعادة تحميل الصفحة
-          </button>
-      </div>
-  </div>
-
-  <div class="contact-float">
-      <a id="whatsapp-link" href="#" target="_blank" class="contact-btn whatsapp-float hidden" title="تواصل عبر واتساب">
-          <i class="fab fa-whatsapp"></i>
-      </a>
-      <a id="telegram-link" href="#" target="_blank" class="contact-btn telegram-float hidden" title="تابعنا على تليجرام">
-          <i class="fab fa-telegram-plane"></i>
-      </a>
-  </div>
-
+  <div id="custom-alert-modal" class="fixed inset-0 bg-slate-900/95 backdrop-blur z-[200] hidden flex items-center justify-center p-6"> 
+   <div class="bg-white p-8 rounded-[2rem] shadow-2xl w-full max-w-sm text-center animate-bounce-in border-4 border-red-100 relative"> 
+    <div class="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner"> <i class="fas fa-user-shield text-5xl text-red-500"></i> 
+    </div> 
+    <h3 class="text-2xl font-black text-slate-800 mb-2">تنبيه أمني</h3> 
+    <p id="custom-alert-msg" class="text-slate-500 font-bold mb-8 leading-relaxed text-sm"></p> <button onclick="location.reload()" class="w-full bg-slate-800 text-white py-4 rounded-xl font-black shadow-lg hover:bg-slate-900 transition-all transform hover:scale-[1.02]"> <i class="fas fa-redo ml-2"></i> إعادة تحميل الصفحة </button> 
+   </div> 
+  </div> 
+  <div class="contact-float"> <a id="whatsapp-link" href="#" target="_blank" class="contact-btn whatsapp-float hidden" title="تواصل عبر واتساب"> <i class="fab fa-whatsapp"></i> </a> <a id="telegram-link" href="#" target="_blank" class="contact-btn telegram-float hidden" title="تابعنا على تليجرام"> <i class="fab fa-telegram-plane"></i> </a> 
+  </div> 
   <div id="loading" class="fixed inset-0 bg-white z-[999] flex flex-col items-center justify-center"> 
    <div class="w-20 h-20 border-8 border-brand-500 border-t-transparent rounded-full animate-spin mb-6"></div> 
-   <p id="loading-text" class="font-black text-slate-400 text-lg animate-pulse">جاري الاتصال بالمنصة...</p> 
-   
-   <button id="retry-btn" onclick="location.reload()" class="hidden mt-6 bg-red-50 text-red-500 px-6 py-2 rounded-full font-bold text-sm border border-red-100 hover:bg-red-100">
-       <i class="fas fa-wifi"></i> إعادة الاتصال
-   </button>
+   <p id="loading-text" class="font-black text-slate-400 text-lg animate-pulse">جاري الاتصال بالمنصة...</p> <button id="retry-btn" onclick="location.reload()" class="hidden mt-6 bg-red-50 text-red-500 px-6 py-2 rounded-full font-bold text-sm border border-red-100 hover:bg-red-100"> <i class="fas fa-wifi"></i> إعادة الاتصال </button> 
   </div> 
-
   <div id="app-banner" class="hidden p-3 bg-gradient-to-r from-slate-900 to-slate-800 text-white sticky top-0 z-50 shadow-lg border-b border-slate-700"> 
-   <div class="container mx-auto flex justify-between items-center px-4"> 
-       <span class="font-bold text-xs md:text-sm flex items-center gap-2"><i class="fas fa-mobile-alt"></i> <span id="ui-app-text"></span></span> 
-       <a id="ui-app-link" href="#" target="_blank" class="bg-yellow-400 text-slate-900 px-5 py-1.5 rounded-full text-xs font-black hover:bg-yellow-300 transition-colors">تنزيل التطبيق</a> 
+   <div class="container mx-auto flex justify-between items-center px-4"> <span class="font-bold text-xs md:text-sm flex items-center gap-2"><i class="fas fa-mobile-alt"></i> <span id="ui-app-text"></span></span> <a id="ui-app-link" href="#" target="_blank" class="bg-yellow-400 text-slate-900 px-5 py-1.5 rounded-full text-xs font-black hover:bg-yellow-300 transition-colors">تنزيل التطبيق</a> 
    </div> 
   </div> 
-
   <nav class="bg-white border-b-4 border-brand-500 p-4 shadow-sm relative z-40"> 
    <div class="container mx-auto flex justify-between items-center"> 
-    <h1 class="text-xl md:text-2xl font-black text-brand-800 cursor-pointer flex items-center gap-2" onclick="location.reload()"> 
-        <i class="fas fa-graduation-cap text-brand-500"></i> <span id="ui-site-name">المنصة التعليمية</span> 
-    </h1> 
+    <h1 class="text-xl md:text-2xl font-black text-brand-800 cursor-pointer flex items-center gap-2" onclick="location.reload()"> <i class="fas fa-graduation-cap text-brand-500"></i> <span id="ui-site-name">المنصة التعليمية</span> </h1> 
    </div> 
   </nav> 
-
   <main class="container mx-auto px-4 py-8 space-y-8 min-h-screen"> 
-   
    <section id="landing" class="view-section hidden space-y-12"> 
     <div class="text-center space-y-4 pt-8"> 
      <h2 class="text-4xl md:text-7xl font-black text-slate-900 tracking-tight" id="ui-hero-title"></h2> 
      <p class="text-slate-500 font-bold text-xl md:text-2xl max-w-2xl mx-auto" id="ui-hero-desc"></p> 
     </div> 
-    
     <div id="ui-tutorial-box" class="hidden bg-blue-50 border-r-8 border-blue-600 p-8 rounded-3xl max-w-3xl mx-auto shadow-sm"> 
-     <h4 class="font-black text-blue-900 mb-2 flex items-center gap-2"><i class="fas fa-info-circle"></i> تنويه هام:</h4>
+     <h4 class="font-black text-blue-900 mb-2 flex items-center gap-2"><i class="fas fa-info-circle"></i> تنويه هام:</h4> 
      <p id="ui-tutorial-text" class="font-bold text-slate-700 leading-relaxed text-lg"></p> 
     </div> 
-    
-    <div id="ui-ext-link-area" class="hidden text-center"> 
-        <a id="ui-ext-link" href="#" target="_blank" class="inline-flex items-center gap-3 bg-slate-900 text-white px-8 py-4 rounded-2xl font-black shadow-xl hover:scale-105 transition-all ring-4 ring-slate-100"> 
-            <i class="fas fa-external-link-alt text-yellow-400"></i> <span id="ui-ext-text"></span> 
-        </a> 
+    <div id="ui-ext-link-area" class="hidden text-center"> <a id="ui-ext-link" href="#" target="_blank" class="inline-flex items-center gap-3 bg-slate-900 text-white px-8 py-4 rounded-2xl font-black shadow-xl hover:scale-105 transition-all ring-4 ring-slate-100"> <i class="fas fa-external-link-alt text-yellow-400"></i> <span id="ui-ext-text"></span> </a> 
     </div> 
-    
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto pb-10"> 
      <div onclick="app.enterVisitor()" class="group bg-white p-10 rounded-[3rem] shadow-xl border-b-[10px] border-slate-200 cursor-pointer hover:-translate-y-2 transition-all text-center relative overflow-hidden"> 
-      <div class="absolute inset-0 bg-slate-50 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-      <div class="relative z-10">
-          <div class="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
-            <i class="fas fa-user-graduate text-5xl text-slate-400"></i> 
-          </div>
-          <h3 class="text-3xl font-black text-slate-700" id="ui-btn-vis">دخول كزائر</h3> 
-          <p class="text-slate-400 font-bold mt-2 text-sm">تصفح المحتوى المجاني المتاح</p>
-      </div>
+      <div class="absolute inset-0 bg-slate-50 opacity-0 group-hover:opacity-100 transition-opacity"></div> 
+      <div class="relative z-10"> 
+       <div class="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform"> <i class="fas fa-user-graduate text-5xl text-slate-400"></i> 
+       </div> 
+       <h3 class="text-3xl font-black text-slate-700" id="ui-btn-vis">دخول كزائر</h3> 
+       <p class="text-slate-400 font-bold mt-2 text-sm">تصفح المحتوى المجاني المتاح</p> 
+      </div> 
      </div> 
-     
      <div onclick="app.enterSubscriber()" class="group bg-white p-10 rounded-[3rem] shadow-xl border-b-[10px] border-brand-500 cursor-pointer hover:-translate-y-2 transition-all text-center relative overflow-hidden"> 
-      <div class="absolute inset-0 bg-green-50 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-      <div class="relative z-10">
-          <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
-            <i class="fas fa-crown text-5xl text-brand-600 animate-pulse"></i> 
-          </div>
-          <h3 class="text-3xl font-black text-brand-800" id="ui-btn-sub">دخول المشتركين</h3> 
-          <p class="text-green-600/70 font-bold mt-2 text-sm">للوصول الكامل لكل الاختبارات</p>
-      </div>
+      <div class="absolute inset-0 bg-green-50 opacity-0 group-hover:opacity-100 transition-opacity"></div> 
+      <div class="relative z-10"> 
+       <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform"> <i class="fas fa-crown text-5xl text-brand-600 animate-pulse"></i> 
+       </div> 
+       <h3 class="text-3xl font-black text-brand-800" id="ui-btn-sub">دخول المشتركين</h3> 
+       <p class="text-green-600/70 font-bold mt-2 text-sm">للوصول الكامل لكل الاختبارات</p> 
+      </div> 
      </div> 
     </div> 
    </section> 
-
    <section id="dashboard" class="view-section hidden space-y-8 animate-fadeIn"> 
     <div class="bg-white p-6 rounded-3xl shadow-sm flex flex-col md:flex-row justify-between items-center gap-4 border border-slate-100"> 
-        <div class="flex items-center gap-3">
-             <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center"><i class="fas fa-user text-slate-500"></i></div>
-             <span id="user-status" class="font-black text-lg text-slate-700"></span> 
-        </div>
-        <button onclick="app.logoutForce()" class="bg-red-50 text-red-500 px-6 py-3 rounded-2xl font-bold text-sm hover:bg-red-500 hover:text-white transition-all w-full md:w-auto flex items-center justify-center gap-2"><i class="fas fa-sign-out-alt"></i> خروج آمن</button> 
+     <div class="flex items-center gap-3"> 
+      <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center"> <i class="fas fa-user text-slate-500"></i> 
+      </div> <span id="user-status" class="font-black text-lg text-slate-700"></span> 
+     </div> <button onclick="app.logoutForce()" class="bg-red-50 text-red-500 px-6 py-3 rounded-2xl font-bold text-sm hover:bg-red-500 hover:text-white transition-all w-full md:w-auto flex items-center justify-center gap-2"><i class="fas fa-sign-out-alt"></i> خروج آمن</button> 
     </div> 
-    
     <div id="simulations-list" class="grid grid-cols-1 gap-4"></div> 
-    
-    <div class="text-center py-4"> 
-     <span class="bg-slate-100 text-slate-500 px-4 py-1 rounded-full text-xs font-bold">تصفح الأقسام</span>
+    <div class="text-center py-4"> <span class="bg-slate-100 text-slate-500 px-4 py-1 rounded-full text-xs font-bold">تصفح الأقسام</span> 
      <h2 class="text-3xl font-black text-slate-800 mt-2">الأقسام الرئيسية</h2> 
     </div> 
     
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-5"> 
-        <button onclick="app.selectMajor('Competition')" class="col-span-2 md:col-span-3 bg-gradient-to-br from-amber-500 to-orange-600 text-white p-8 rounded-[2rem] shadow-lg border-b-8 border-orange-800 hover:scale-[1.01] transition-all flex items-center justify-center gap-4 relative overflow-hidden group"> 
-            <div class="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-            <i class="fas fa-trophy text-5xl text-yellow-200 drop-shadow-md"></i> 
-            <div class="text-right z-10"> 
-                <span class="block font-black text-2xl">مسابقات وملفات عامة</span> 
-                <span class="text-orange-100 text-sm font-bold">كل ما يخص التنظيم والإدارة</span>
-            </div> 
-        </button> 
-        
-        <button onclick="app.selectMajor('لغة عربية')" class="hover-card bg-white p-6 rounded-3xl shadow border-b-8 border-emerald-500 text-slate-700 font-black text-lg hover:-translate-y-1 transition-all"><i class="fas fa-book-open block text-3xl mb-2 text-emerald-500"></i> لغة عربية</button> 
-        <button onclick="app.selectMajor('رياضيات')" class="hover-card bg-white p-6 rounded-3xl shadow border-b-8 border-blue-600 text-slate-700 font-black text-lg hover:-translate-y-1 transition-all"><i class="fas fa-calculator block text-3xl mb-2 text-blue-600"></i> رياضيات</button> 
-        <button onclick="app.selectMajor('علوم')" class="hover-card bg-white p-6 rounded-3xl shadow border-b-8 border-purple-600 text-slate-700 font-black text-lg hover:-translate-y-1 transition-all"><i class="fas fa-flask block text-3xl mb-2 text-purple-600"></i> علوم</button> 
-        <button onclick="app.selectMajor('دراسات')" class="hover-card bg-white p-6 rounded-3xl shadow border-b-8 border-amber-500 text-slate-700 font-black text-lg hover:-translate-y-1 transition-all"><i class="fas fa-globe-africa block text-3xl mb-2 text-amber-500"></i> دراسات</button> 
-        <button onclick="app.selectMajor('لغة إنجليزية')" class="hover-card bg-white p-6 rounded-3xl shadow border-b-8 border-rose-500 text-slate-700 font-black text-lg hover:-translate-y-1 transition-all"><i class="fas fa-language block text-3xl mb-2 text-rose-500"></i> English</button> 
-    </div> 
+    <div id="majors-grid" class="grid grid-cols-2 md:grid-cols-3 gap-5"></div> 
    </section> 
-
    <section id="sub-dashboard" class="view-section hidden space-y-6"> 
     <div class="flex justify-between items-center mb-6 bg-white p-4 rounded-2xl shadow-sm"> 
-        <h3 id="major-title" class="font-black text-xl text-slate-800"></h3> 
-        <button onclick="app.showSection('dashboard')" class="text-blue-600 bg-blue-50 px-4 py-2 rounded-xl font-bold text-sm hover:bg-blue-100">تغيير القسم</button> 
+     <h3 id="major-title" class="font-black text-xl text-slate-800"></h3> <button onclick="app.showSection('dashboard')" class="text-blue-600 bg-blue-50 px-4 py-2 rounded-xl font-bold text-sm hover:bg-blue-100">تغيير القسم</button> 
     </div> 
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"> 
-        <button onclick="app.selectMinor('تخصص')" class="md:col-span-2 lg:col-span-3 p-8 bg-slate-800 text-white rounded-[2rem] shadow-xl border-r-[8px] border-yellow-400 flex justify-between items-center hover:bg-slate-900 transition-all group"> 
-          <div class="text-right"> 
-           <h4 class="text-3xl font-black mb-1">أسئلة التخصص</h4> 
-           <p class="text-slate-400 font-bold text-sm group-hover:text-yellow-400 transition-colors">بنك أسئلة شامل لتخصصك</p>
-          </div>
-          <i class="fas fa-star text-5xl text-yellow-400 group-hover:scale-110 transition-transform"></i> 
-        </button> 
-        
-        <button onclick="app.selectMinor('تربوي')" class="p-6 bg-white rounded-2xl shadow font-bold hover:bg-slate-50 text-right border-r-4 border-transparent hover:border-brand-500 transition-all">التربوي</button> 
-        <button onclick="app.selectMinor('جدارات')" class="p-6 bg-white rounded-2xl shadow font-bold hover:bg-slate-50 text-right border-r-4 border-transparent hover:border-brand-500 transition-all">الجدارات السلوكية</button> 
-        <button onclick="app.selectMinor('IQ')" class="p-6 bg-white rounded-2xl shadow font-bold hover:bg-slate-50 text-right border-r-4 border-transparent hover:border-brand-500 transition-all">IQ والذكاء</button> 
-        <button onclick="app.selectMinor('عربي للجميع')" class="p-6 bg-white rounded-2xl shadow font-bold hover:bg-slate-50 text-right border-r-4 border-transparent hover:border-brand-500 transition-all">لغة عربية (عام)</button> 
-        <button onclick="app.selectMinor('انجليزي للجميع')" class="p-6 bg-white rounded-2xl shadow font-bold hover:bg-slate-50 text-right border-r-4 border-transparent hover:border-brand-500 transition-all">لغة إنجليزية (عام)</button> 
-        <button onclick="app.selectMinor('حاسب آلي')" class="p-6 bg-white rounded-2xl shadow font-bold hover:bg-slate-50 text-right border-r-4 border-transparent hover:border-brand-500 transition-all text-blue-700">حاسب آلي</button> 
-        <button onclick="app.selectMinor('معلومات عامة')" class="p-6 bg-white rounded-2xl shadow font-bold hover:bg-slate-50 text-right border-r-4 border-transparent hover:border-brand-500 transition-all">معلومات عامة</button> 
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"> <button onclick="app.selectMinor('تخصص')" class="md:col-span-2 lg:col-span-3 p-8 bg-slate-800 text-white rounded-[2rem] shadow-xl border-r-[8px] border-yellow-400 flex justify-between items-center hover:bg-slate-900 transition-all group"> 
+      <div class="text-right"> 
+       <h4 class="text-3xl font-black mb-1">أسئلة التخصص</h4> 
+       <p class="text-slate-400 font-bold text-sm group-hover:text-yellow-400 transition-colors">بنك أسئلة شامل لتخصصك</p> 
+      </div> <i class="fas fa-star text-5xl text-yellow-400 group-hover:scale-110 transition-transform"></i> </button> <button onclick="app.selectMinor('تربوي')" class="p-6 bg-white rounded-2xl shadow font-bold hover:bg-slate-50 text-right border-r-4 border-transparent hover:border-brand-500 transition-all">التربوي</button> <button onclick="app.selectMinor('جدارات')" class="p-6 bg-white rounded-2xl shadow font-bold hover:bg-slate-50 text-right border-r-4 border-transparent hover:border-brand-500 transition-all">الجدارات السلوكية</button> <button onclick="app.selectMinor('IQ')" class="p-6 bg-white rounded-2xl shadow font-bold hover:bg-slate-50 text-right border-r-4 border-transparent hover:border-brand-500 transition-all">IQ والذكاء</button> <button onclick="app.selectMinor('عربي للجميع')" class="p-6 bg-white rounded-2xl shadow font-bold hover:bg-slate-50 text-right border-r-4 border-transparent hover:border-brand-500 transition-all">لغة عربية (عام)</button> <button onclick="app.selectMinor('انجليزي للجميع')" class="p-6 bg-white rounded-2xl shadow font-bold hover:bg-slate-50 text-right border-r-4 border-transparent hover:border-brand-500 transition-all">لغة إنجليزية (عام)</button> <button onclick="app.selectMinor('حاسب آلي')" class="p-6 bg-white rounded-2xl shadow font-bold hover:bg-slate-50 text-right border-r-4 border-transparent hover:border-brand-500 transition-all text-blue-700">حاسب آلي</button> <button onclick="app.selectMinor('معلومات عامة')" class="p-6 bg-white rounded-2xl shadow font-bold hover:bg-slate-50 text-right border-r-4 border-transparent hover:border-brand-500 transition-all">معلومات عامة</button> 
     </div> 
    </section> 
-
    <section id="content-list" class="view-section hidden space-y-8"> 
     <div class="flex justify-between items-center mb-4 bg-white p-4 rounded-2xl shadow-sm"> 
-        <h3 id="list-title" class="font-black text-lg text-brand-800"></h3> 
-        <button onclick="app.showSection('sub-dashboard')" class="bg-slate-100 px-4 py-2 rounded-xl font-bold text-sm text-slate-600 hover:bg-slate-200">رجوع</button> 
+     <h3 id="list-title" class="font-black text-lg text-brand-800"></h3> <button onclick="app.showSection('sub-dashboard')" class="bg-slate-100 px-4 py-2 rounded-xl font-bold text-sm text-slate-600 hover:bg-slate-200">رجوع</button> 
     </div> 
-    
     <div id="files-box" class="hidden"> 
      <h4 class="font-black text-red-600 mb-4 flex items-center gap-2 text-xl border-b pb-2"><i class="fas fa-folder-open"></i> الملفات المتاحة:</h4> 
      <div id="files-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div> 
     </div> 
-    
     <div id="quizzes-box"> 
      <h4 class="font-black text-blue-600 mb-4 flex items-center gap-2 text-xl border-b pb-2"><i class="fas fa-list-check"></i> الاختبارات المتاحة:</h4> 
      <div id="quizzes-grid" class="space-y-4"></div> 
     </div> 
    </section> 
-
    <section id="exam-player" class="view-section hidden max-w-3xl mx-auto space-y-6"> 
     <div class="bg-white p-6 rounded-[2rem] shadow-xl border-t-8 border-brand-500 sticky top-24 z-30"> 
-     <div class="flex justify-between mb-4 items-center"> 
-         <span id="timer-display" class="font-black text-red-500 text-2xl font-mono hidden tracking-widest bg-red-50 px-3 py-1 rounded-lg">00:00</span> 
-         <span id="progress-text" class="text-sm font-black text-brand-700 bg-brand-50 px-3 py-1 rounded-full"></span> 
-         <button onclick="location.reload()" class="text-xs font-bold text-red-400 hover:text-red-600 bg-red-50 px-3 py-1 rounded-lg">انسحاب</button> 
+     <div class="flex justify-between mb-4 items-center"> <span id="timer-display" class="font-black text-red-500 text-2xl font-mono hidden tracking-widest bg-red-50 px-3 py-1 rounded-lg">00:00</span> <span id="progress-text" class="text-sm font-black text-brand-700 bg-brand-50 px-3 py-1 rounded-full"></span> <button onclick="location.reload()" class="text-xs font-bold text-red-400 hover:text-red-600 bg-red-50 px-3 py-1 rounded-lg">انسحاب</button> 
      </div> 
      <div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden"> 
       <div id="progress-bar" class="h-full bg-brand-500 transition-all duration-500 ease-out shadow-[0_0_10px_#22c55e]" style="width: 0%"></div> 
      </div> 
     </div> 
-    
     <div id="question-box" class="animate-slideUp"></div> 
-    
     <div id="result-box" class="hidden text-center space-y-8 animate-fadeIn"> 
      <div class="bg-white p-10 rounded-[3rem] shadow-2xl border-t-[12px] border-brand-500 relative overflow-hidden"> 
-        <div class="absolute top-0 left-0 w-full h-full bg-brand-50 opacity-20 pointer-events-none" style="background-image: radial-gradient(#22c55e 1px, transparent 1px); background-size: 20px 20px;"></div>
-        <i class="fas fa-award text-7xl text-yellow-400 mb-6 block animate-bounce drop-shadow-lg"></i> 
-        <h2 class="text-3xl font-black mb-2 text-slate-800">نتيجة الاختبار</h2> 
-        <p id="res-score" class="text-7xl font-black text-brand-600 mb-6 font-mono tracking-tighter"></p> 
-        <p id="res-msg" class="text-xl font-bold text-slate-600 mb-8 bg-slate-50 py-3 rounded-2xl"></p> 
-        <button onclick="location.reload()" class="bg-slate-900 text-white px-10 py-4 rounded-full font-black shadow-lg hover:bg-black hover:scale-105 transition-all">العودة للقائمة الرئيسية</button> 
+      <div class="absolute top-0 left-0 w-full h-full bg-brand-50 opacity-20 pointer-events-none" style="background-image: radial-gradient(#22c55e 1px, transparent 1px); background-size: 20px 20px;"></div> <i class="fas fa-award text-7xl text-yellow-400 mb-6 block animate-bounce drop-shadow-lg"></i> 
+      <h2 class="text-3xl font-black mb-2 text-slate-800">نتيجة الاختبار</h2> 
+      <p id="res-score" class="text-7xl font-black text-brand-600 mb-6 font-mono tracking-tighter"></p> 
+      <p id="res-msg" class="text-xl font-bold text-slate-600 mb-8 bg-slate-50 py-3 rounded-2xl"></p> <button onclick="location.reload()" class="bg-slate-900 text-white px-10 py-4 rounded-full font-black shadow-lg hover:bg-black hover:scale-105 transition-all">العودة للقائمة الرئيسية</button> 
      </div> 
-     
      <div class="text-right"> 
       <h3 class="font-black text-2xl text-slate-700 mb-6 border-r-8 border-blue-500 pr-4 flex items-center gap-3 bg-white p-4 rounded-xl shadow-sm"><i class="fas fa-history text-blue-500"></i> مراجعة الإجابات التفصيلية</h3> 
       <div id="review-list" class="space-y-5"></div> 
@@ -321,43 +182,30 @@
     </div> 
    </section> 
   </main> 
-
   <footer class="bg-white border-t py-6 mt-12"> 
-    <div class="container mx-auto px-6 text-center">
-       <p id="footer-text" class="text-sm font-bold text-slate-400"></p> 
-    </div>
+   <div class="container mx-auto px-6 text-center"> 
+    <p id="footer-text" class="text-sm font-bold text-slate-400"></p> 
+   </div> 
   </footer> 
-
   <div id="subscriber-login-modal" class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm hidden z-[100] flex items-center justify-center p-4 transition-opacity duration-300"> 
    <div class="bg-white p-8 rounded-[2.5rem] w-full max-w-sm text-center shadow-2xl modal-animate border-4 border-white ring-4 ring-brand-100"> 
-    <div class="w-16 h-16 bg-brand-50 rounded-full flex items-center justify-center mx-auto mb-4">
-        <i class="fas fa-lock text-3xl text-brand-500"></i> 
-    </div>
+    <div class="w-16 h-16 bg-brand-50 rounded-full flex items-center justify-center mx-auto mb-4"> <i class="fas fa-lock text-3xl text-brand-500"></i> 
+    </div> 
     <h3 class="text-2xl font-black mb-2 text-slate-800">منطقة المشتركين</h3> 
     <p class="text-slate-400 text-sm mb-6 font-bold">جلسة واحدة آمنة لكل جهاز</p> 
     <div class="space-y-4"> 
-     <div class="relative">
-         <i class="fas fa-user absolute top-4 right-4 text-slate-400"></i>
-         <input type="text" id="sub-user" placeholder="اسم المستخدم" class="w-full border-2 border-slate-200 p-3 pr-10 rounded-xl font-bold outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all bg-slate-50 focus:bg-white"> 
-     </div>
-     <div class="relative">
-         <i class="fas fa-key absolute top-4 right-4 text-slate-400"></i>
-         <input type="password" id="sub-pass" placeholder="كلمة المرور" class="w-full border-2 border-slate-200 p-3 pr-10 rounded-xl font-bold outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all bg-slate-50 focus:bg-white"> 
-     </div>
-    </div> 
-    <button onclick="app.loginSubscriber()" class="w-full bg-brand-600 text-white py-4 rounded-xl font-black shadow-lg shadow-brand-500/30 mt-6 hover:bg-brand-700 hover:scale-[1.02] transition-all">تسجيل دخول آمن</button> 
-    <button onclick="document.getElementById('subscriber-login-modal').classList.add('hidden')" class="mt-4 text-slate-400 font-bold text-sm hover:text-slate-600">إلغاء والعودة</button> 
+     <div class="relative"> <i class="fas fa-user absolute top-4 right-4 text-slate-400"></i> 
+      <input type="text" id="sub-user" placeholder="اسم المستخدم" class="w-full border-2 border-slate-200 p-3 pr-10 rounded-xl font-bold outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all bg-slate-50 focus:bg-white"> 
+     </div> 
+     <div class="relative"> <i class="fas fa-key absolute top-4 right-4 text-slate-400"></i> 
+      <input type="password" id="sub-pass" placeholder="كلمة المرور" class="w-full border-2 border-slate-200 p-3 pr-10 rounded-xl font-bold outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all bg-slate-50 focus:bg-white"> 
+     </div> 
+    </div> <button onclick="app.loginSubscriber()" class="w-full bg-brand-600 text-white py-4 rounded-xl font-black shadow-lg shadow-brand-500/30 mt-6 hover:bg-brand-700 hover:scale-[1.02] transition-all">تسجيل دخول آمن</button> <button onclick="document.getElementById('subscriber-login-modal').classList.add('hidden')" class="mt-4 text-slate-400 font-bold text-sm hover:text-slate-600">إلغاء والعودة</button> 
    </div> 
   </div> 
-
   <script>
         document.addEventListener('contextmenu', event => event.preventDefault());
-        document.onkeydown = function(e) {
-            if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) || (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) || (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) {
-                return false;
-            }
-        }
-
+        document.onkeydown = function(e) { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) || (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) || (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) { return false; } }
         const firebaseConfig = {
             apiKey: "AIzaSyDvFOWeYV2grWux_Z-nl3uFiTR2Jd9UlvE",
             authDomain: "tgrep-11831.firebaseapp.com",
@@ -370,498 +218,85 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const dbRef = database.ref('edu_platform_data');
+        let db = { quizzes: [], files: [], simulations: [], settings: {}, users: [], majors: [] };
+        let state = { isVIP: false, major: '', minor: '', quiz: null, score: 0, qIdx: 0, timerInterval: null, pendingAction: null, answers: [] };
         
-        let db = { quizzes: [], files: [], simulations: [], settings: {}, users: [] };
-        let state = { 
-            isVIP: false, 
-            major: '', 
-            minor: '', 
-            quiz: null, 
-            score: 0, 
-            qIdx: 0, 
-            timerInterval: null,
-            pendingAction: null,
-            answers: [] 
-        };
-
         const app = {
             init: () => {
-                // إظهار زر إعادة المحاولة بعد 10 ثواني إذا تأخر التحميل
-                setTimeout(() => {
-                    const l = document.getElementById('loading');
-                    if(!l.classList.contains('hidden')) {
-                        document.getElementById('loading-text').innerText = "يبدو أن الاتصال بطيء...";
-                        document.getElementById('retry-btn').classList.remove('hidden');
-                    }
-                }, 10000);
+                setTimeout(() => { const l = document.getElementById('loading'); if(!l.classList.contains('hidden')) { document.getElementById('loading-text').innerText = "يبدو أن الاتصال بطيء..."; document.getElementById('retry-btn').classList.remove('hidden'); } }, 10000);
+                
+                database.ref('edu_platform_data/stats/visitors').transaction(current => { return (current || 0) + 1; });
 
-                // --- التحسين الكبير: تحميل الإعدادات فقط أولاً ---
                 dbRef.child('settings').once('value').then(snap => {
                     db.settings = snap.val() || {};
-                    
-                    // إخفاء شاشة التحميل فوراً وعرض الموقع
                     document.getElementById('loading').classList.add('hidden');
                     app.renderUI();
                     app.checkSession();
-                    
-                    // --- تحميل باقي البيانات الثقيلة في الخلفية ---
                     app.loadHeavyData();
-                }).catch(err => {
-                    console.error(err);
-                    document.getElementById('loading-text').innerText = "خطأ في الاتصال، تأكد من الإنترنت";
-                    document.getElementById('retry-btn').classList.remove('hidden');
-                });
+                    app.fetchMajors(); 
+                }).catch(err => { console.error(err); document.getElementById('loading-text').innerText = "خطأ في الاتصال، تأكد من الإنترنت"; document.getElementById('retry-btn').classList.remove('hidden'); });
             },
-
-            // دالة جديدة لتحميل البيانات الثقيلة بشكل منفصل
             loadHeavyData: () => {
-                // تحميل المحاكيات
                 dbRef.child('simulations').once('value', s => { db.simulations = s.val() || []; app.renderSims(); });
-                // تحميل الاختبارات والملفات (للحفظ في الذاكرة فقط)
                 dbRef.child('quizzes').once('value', s => { db.quizzes = s.val() || []; });
                 dbRef.child('files').once('value', s => { db.files = s.val() || []; });
             },
-
-            notify: (msg, type='success') => {
-                const t = document.getElementById('toast-notification');
-                const i = document.getElementById('toast-icon');
-                const m = document.getElementById('toast-msg');
-                
-                if(type === 'error') {
-                    t.className = 'bg-red-600 text-white shadow-red-500/50';
-                    i.className = 'fas fa-exclamation-triangle';
-                } else {
-                    t.className = 'bg-emerald-600 text-white shadow-emerald-500/50';
-                    i.className = 'fas fa-check-circle';
-                }
-                
-                m.innerText = msg;
-                t.classList.add('show');
-                setTimeout(() => t.classList.remove('show'), 3000);
-            },
-            
-            loginSubscriber: () => {
-                const uInput = document.getElementById('sub-user').value.trim();
-                const pInput = document.getElementById('sub-pass').value.trim();
-                
-                if(!uInput || !pInput) return app.notify("أدخل اسم المستخدم وكلمة المرور", "error");
-
-                app.notify("جاري التحقق...", "success");
-
-                // البحث في قاعدة البيانات عن المستخدم المحدد فقط (تحسين الأداء)
-                database.ref('edu_platform_data/users').orderByChild('username').equalTo(uInput).once('value', snap => {
-                    if (!snap.exists()) return app.notify("بيانات الدخول غير صحيحة", "error");
-
-                    let foundUser = null;
-                    let foundKey = null;
-
-                    snap.forEach(childSnapshot => {
-                        const u = childSnapshot.val();
-                        if(u.password === pInput) {
-                            foundUser = u;
-                            foundKey = childSnapshot.key;
-                        }
-                    });
-
-                    if(!foundUser) return app.notify("كلمة المرور غير صحيحة", "error");
-                    if(!foundUser.isActive) return app.notify("عذراً، هذا الحساب موقوف", "error");
-                    if(Date.now() > foundUser.expiryDate) return app.notify("انتهت صلاحية اشتراكك", "error");
-
-                    const sessionToken = Date.now() + "_" + Math.random().toString(36).substr(2, 9);
-                    
-                    database.ref(`edu_platform_data/users/${foundKey}/sessionToken`).set(sessionToken)
-                    .then(() => {
-                        database.ref(`edu_platform_data/users/${foundKey}/lastLogin`).set(Date.now());
-                        
-                        localStorage.setItem('vip_session', sessionToken);
-                        localStorage.setItem('vip_uid', foundKey);
-                        localStorage.setItem('vip_name', foundUser.username);
-                        
-                        app.activateVIP(foundUser.username, foundKey);
-                        document.getElementById('subscriber-login-modal').classList.add('hidden');
-                        app.notify(`أهلاً بك يا ${foundUser.username} 👋`);
-                    })
-                    .catch(err => {
-                        console.error(err);
-                        app.notify("خطأ في بدء الجلسة", "error");
-                    });
-
-                }).catch(err => {
-                    app.notify("خطأ في الاتصال: " + err.message, "error");
+            fetchMajors: () => {
+                dbRef.child('majors').on('value', snap => {
+                    db.majors = snap.val() || ['لغة عربية', 'رياضيات', 'علوم', 'دراسات', 'لغة إنجليزية'];
+                    app.renderMajorsGrid();
                 });
             },
+            renderMajorsGrid: () => {
+                const grid = document.getElementById('majors-grid');
+                let html = `
+                <button onclick="app.selectMajor('Competition')" class="col-span-2 md:col-span-3 bg-gradient-to-br from-amber-500 to-orange-600 text-white p-8 rounded-[2rem] shadow-lg border-b-8 border-orange-800 hover:scale-[1.01] transition-all flex items-center justify-center gap-4 relative overflow-hidden group"> 
+                    <div class="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div> <i class="fas fa-trophy text-5xl text-yellow-200 drop-shadow-md"></i> 
+                    <div class="text-right z-10"> <span class="block font-black text-2xl">مسابقات وملفات عامة</span> <span class="text-orange-100 text-sm font-bold">كل ما يخص التنظيم والإدارة</span> </div> 
+                </button>`;
 
-            checkSession: () => {
-                const localToken = localStorage.getItem('vip_session');
-                const localUid = localStorage.getItem('vip_uid');
-                const localName = localStorage.getItem('vip_name');
-
-                if(localToken && localUid) {
-                    app.monitorSession(localUid, localToken);
-                    app.activateVIP(localName || 'مشترك', localUid);
-                }
-            },
-
-            monitorSession: (uid, localToken) => {
-                const userTokenRef = database.ref(`edu_platform_data/users/${uid}/sessionToken`);
-                userTokenRef.on('value', snap => {
-                    const serverToken = snap.val();
-                    if (serverToken && serverToken !== localToken) {
-                        userTokenRef.off(); 
-                        app.logoutForce(true);
-                    }
-                });
-                
-                const userActiveRef = database.ref(`edu_platform_data/users/${uid}/isActive`);
-                userActiveRef.on('value', snap => {
-                    if (snap.exists() && snap.val() === false) {
-                        userActiveRef.off();
-                        localStorage.clear();
-                        document.getElementById('custom-alert-msg').innerText = "⛔ تم إيقاف حسابك من قبل الإدارة.";
-                        document.getElementById('custom-alert-modal').classList.remove('hidden');
-                    }
-                });
-            },
-
-            activateVIP: (name, uid) => {
-                state.isVIP = true;
-                app.updateStatus(name);
-                app.renderSims();
-                if(state.pendingAction) { state.pendingAction(); state.pendingAction = null; }
-                else if(document.getElementById('landing').classList.contains('hidden')) {
-                } else {
-                    app.showSection('dashboard');
-                }
-            },
-
-            logoutForce: (kicked = false) => {
-                localStorage.clear();
-                if(kicked) {
-                    document.getElementById('custom-alert-msg').innerText = "⚠️ تم تسجيل الدخول من جهاز آخر.\nلا يمكن فتح الحساب على جهازين في نفس الوقت.";
-                    document.getElementById('custom-alert-modal').classList.remove('hidden');
-                } else {
-                    location.reload();
-                }
-            },
-
-            renderUI: () => {
-                const s = db.settings || {};
-                const els = {
-                    'ui-site-name': s.siteName, 'ui-hero-title': s.heroTitle, 'ui-hero-desc': s.heroDesc,
-                    'footer-text': s.footerText, 'ui-app-text': s.appText,
-                    'ui-ext-text': s.extLinkText, 'ui-btn-vis': s.btnVisitor, 'ui-btn-sub': s.btnSub,
+                // دالة مساعدة لاختيار لون عشوائي للقسم المضاف حديثاً
+                const getColorForString = (str) => {
+                    const colors = ['emerald', 'blue', 'purple', 'rose', 'cyan', 'indigo', 'teal'];
+                    let hash = 0;
+                    for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
+                    return colors[Math.abs(hash) % colors.length];
                 };
-                for(let k in els) if(document.getElementById(k)) document.getElementById(k).innerText = els[k] || "";
-                
-                const waLink = document.getElementById('whatsapp-link');
-                const tgLink = document.getElementById('telegram-link');
-                
-                if(s.whatsapp) {
-                    waLink.href = `https://wa.me/${s.whatsapp}`;
-                    waLink.classList.remove('hidden');
-                } else {
-                    waLink.classList.add('hidden');
-                }
 
-                if(s.telegram) {
-                    tgLink.href = `https://t.me/${s.telegram}`;
-                    tgLink.classList.remove('hidden');
-                } else {
-                    tgLink.classList.add('hidden');
-                }
-                
-                if(s.tutorialText && s.tutorialText.trim() !== "") {
-                    document.getElementById('ui-tutorial-box').classList.remove('hidden');
-                    document.getElementById('ui-tutorial-text').innerText = s.tutorialText;
-                } else document.getElementById('ui-tutorial-box').classList.add('hidden');
-
-                if(s.extLinkUrl) { document.getElementById('ui-ext-link-area').classList.remove('hidden'); document.getElementById('ui-ext-link').href = s.extLinkUrl; }
-                if(s.appLink) { document.getElementById('app-banner').classList.remove('hidden'); document.getElementById('ui-app-link').href = s.appLink; }
-                
-                app.renderSims();
-                if(document.querySelectorAll('.view-section.hidden').length === document.querySelectorAll('.view-section').length) app.showSection('landing');
+                db.majors.forEach(m => {
+                    if (m === 'Competition') return;
+                    const color = getColorForString(m);
+                    
+                    html += `
+                    <button onclick="app.selectMajor('${m}')" class="hover-card bg-white p-6 rounded-3xl shadow border-b-8 border-${color}-500 text-slate-700 font-black text-lg hover:-translate-y-1 transition-all">
+                        <i class="fas fa-book-open block text-3xl mb-2 text-${color}-500"></i> ${m}
+                    </button>`;
+                });
+                grid.innerHTML = html;
             },
-            
-            renderSims: () => {
-                const simList = document.getElementById('simulations-list');
-                simList.innerHTML = "";
-                if(db.simulations && db.simulations.length) {
-                    db.simulations.forEach(sim => {
-                        const locked = sim.mode === 'subscriber' && !state.isVIP;
-                        simList.innerHTML += `
-                        <div onclick="app.startSimulation(${sim.id}, ${locked})" class="w-full bg-slate-800 text-white p-6 rounded-[2rem] shadow-lg border-l-8 border-yellow-400 cursor-pointer hover:-translate-y-1 transition-all group ${locked?'locked-item':''}">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-4">
-                                    <div class="bg-slate-700 p-3 rounded-full group-hover:bg-slate-600 transition-colors">
-                                        <i class="fas fa-stopwatch text-3xl text-yellow-400"></i>
-                                    </div>
-                                    <div class="text-right">
-                                        <h3 class="text-xl font-black">${sim.name}</h3>
-                                        <p class="text-xs text-yellow-200 font-bold mt-1">${sim.targetMajor ? 'تخصص: ' + sim.targetMajor : 'شامل لجميع التخصصات'}</p>
-                                    </div>
-                                </div>
-                                <div class="flex flex-col items-center bg-slate-900/50 p-3 rounded-xl min-w-[80px]">
-                                    <i class="fas ${locked?'fa-lock text-red-500':'fa-play text-green-400'} text-xl mb-1"></i>
-                                    <span class="text-[10px] font-bold text-slate-300">${sim.time} دقيقة</span>
-                                </div>
-                            </div>
-                        </div>`;
-                    });
-                } else {
-                    simList.innerHTML = `<div class="text-center p-4 text-slate-400 font-bold">لا توجد محاكيات متاحة حالياً</div>`;
-                }
-            },
-            
-            showSection: (id) => { 
-                document.querySelectorAll('.view-section').forEach(e=>e.classList.add('hidden')); 
-                document.getElementById(id).classList.remove('hidden'); 
-                window.scrollTo(0,0); 
-            },
-            
+            notify: (msg, type='success') => { const t = document.getElementById('toast-notification'); const i = document.getElementById('toast-icon'); const m = document.getElementById('toast-msg'); if(type === 'error') { t.className = 'bg-red-600 text-white shadow-red-500/50'; i.className = 'fas fa-exclamation-triangle'; } else { t.className = 'bg-emerald-600 text-white shadow-emerald-500/50'; i.className = 'fas fa-check-circle'; } m.innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); },
+            loginSubscriber: () => { const uInput = document.getElementById('sub-user').value.trim(); const pInput = document.getElementById('sub-pass').value.trim(); if(!uInput || !pInput) return app.notify("أدخل اسم المستخدم وكلمة المرور", "error"); app.notify("جاري التحقق...", "success"); database.ref('edu_platform_data/users').orderByChild('username').equalTo(uInput).once('value', snap => { if (!snap.exists()) return app.notify("بيانات الدخول غير صحيحة", "error"); let foundUser = null; let foundKey = null; snap.forEach(childSnapshot => { const u = childSnapshot.val(); if(u.password === pInput) { foundUser = u; foundKey = childSnapshot.key; } }); if(!foundUser) return app.notify("كلمة المرور غير صحيحة", "error"); if(!foundUser.isActive) return app.notify("عذراً، هذا الحساب موقوف", "error"); if(Date.now() > foundUser.expiryDate) return app.notify("انتهت صلاحية اشتراكك", "error"); const sessionToken = Date.now() + "_" + Math.random().toString(36).substr(2, 9); database.ref(`edu_platform_data/users/${foundKey}/sessionToken`).set(sessionToken) .then(() => { database.ref(`edu_platform_data/users/${foundKey}/lastLogin`).set(Date.now()); localStorage.setItem('vip_session', sessionToken); localStorage.setItem('vip_uid', foundKey); localStorage.setItem('vip_name', foundUser.username); app.activateVIP(foundUser.username, foundKey); document.getElementById('subscriber-login-modal').classList.add('hidden'); app.notify(`أهلاً بك يا ${foundUser.username} 👋`); }).catch(err => { console.error(err); app.notify("خطأ في بدء الجلسة", "error"); }); }).catch(err => { app.notify("خطأ في الاتصال: " + err.message, "error"); }); },
+            checkSession: () => { const localToken = localStorage.getItem('vip_session'); const localUid = localStorage.getItem('vip_uid'); const localName = localStorage.getItem('vip_name'); if(localToken && localUid) { app.monitorSession(localUid, localToken); app.activateVIP(localName || 'مشترك', localUid); } },
+            monitorSession: (uid, localToken) => { const userTokenRef = database.ref(`edu_platform_data/users/${uid}/sessionToken`); userTokenRef.on('value', snap => { const serverToken = snap.val(); if (serverToken && serverToken !== localToken) { userTokenRef.off(); app.logoutForce(true); } }); const userActiveRef = database.ref(`edu_platform_data/users/${uid}/isActive`); userActiveRef.on('value', snap => { if (snap.exists() && snap.val() === false) { userActiveRef.off(); localStorage.clear(); document.getElementById('custom-alert-msg').innerText = "⛔ تم إيقاف حسابك من قبل الإدارة."; document.getElementById('custom-alert-modal').classList.remove('hidden'); } }); },
+            activateVIP: (name, uid) => { state.isVIP = true; app.updateStatus(name); app.renderSims(); if(state.pendingAction) { state.pendingAction(); state.pendingAction = null; } else if(document.getElementById('landing').classList.contains('hidden')) { } else { app.showSection('dashboard'); } },
+            logoutForce: (kicked = false) => { localStorage.clear(); if(kicked) { document.getElementById('custom-alert-msg').innerText = "⚠️ تم تسجيل الدخول من جهاز آخر.\nلا يمكن فتح الحساب على جهازين في نفس الوقت."; document.getElementById('custom-alert-modal').classList.remove('hidden'); } else { location.reload(); } },
+            renderUI: () => { const s = db.settings || {}; const els = { 'ui-site-name': s.siteName, 'ui-hero-title': s.heroTitle, 'ui-hero-desc': s.heroDesc, 'footer-text': s.footerText, 'ui-app-text': s.appText, 'ui-ext-text': s.extLinkText, 'ui-btn-vis': s.btnVisitor, 'ui-btn-sub': s.btnSub, }; for(let k in els) if(document.getElementById(k)) document.getElementById(k).innerText = els[k] || ""; const waLink = document.getElementById('whatsapp-link'); const tgLink = document.getElementById('telegram-link'); if(s.whatsapp) { waLink.href = `https://wa.me/${s.whatsapp}`; waLink.classList.remove('hidden'); } else { waLink.classList.add('hidden'); } if(s.telegram) { tgLink.href = `https://t.me/${s.telegram}`; tgLink.classList.remove('hidden'); } else { tgLink.classList.add('hidden'); } if(s.tutorialText && s.tutorialText.trim() !== "") { document.getElementById('ui-tutorial-box').classList.remove('hidden'); document.getElementById('ui-tutorial-text').innerText = s.tutorialText; } else document.getElementById('ui-tutorial-box').classList.add('hidden'); if(s.extLinkUrl) { document.getElementById('ui-ext-link-area').classList.remove('hidden'); document.getElementById('ui-ext-link').href = s.extLinkUrl; } if(s.appLink) { document.getElementById('app-banner').classList.remove('hidden'); document.getElementById('ui-app-link').href = s.appLink; } app.renderSims(); if(document.querySelectorAll('.view-section.hidden').length === document.querySelectorAll('.view-section').length) app.showSection('landing'); },
+            renderSims: () => { const simList = document.getElementById('simulations-list'); simList.innerHTML = ""; if(db.simulations && db.simulations.length) { db.simulations.forEach(sim => { const locked = sim.mode === 'subscriber' && !state.isVIP; simList.innerHTML += ` <div onclick="app.startSimulation(${sim.id}, ${locked})" class="w-full bg-slate-800 text-white p-6 rounded-[2rem] shadow-lg border-l-8 border-yellow-400 cursor-pointer hover:-translate-y-1 transition-all group ${locked?'locked-item':''}"> <div class="flex items-center justify-between"> <div class="flex items-center gap-4"> <div class="bg-slate-700 p-3 rounded-full group-hover:bg-slate-600 transition-colors"> <i class="fas fa-stopwatch text-3xl text-yellow-400"></i> </div> <div class="text-right"> <h3 class="text-xl font-black">${sim.name}</h3> <p class="text-xs text-yellow-200 font-bold mt-1">${sim.targetMajor ? 'تخصص: ' + sim.targetMajor : 'شامل لجميع التخصصات'}</p> </div> </div> <div class="flex flex-col items-center bg-slate-900/50 p-3 rounded-xl min-w-[80px]"> <i class="fas ${locked?'fa-lock text-red-500':'fa-play text-green-400'} text-xl mb-1"></i> <span class="text-[10px] font-bold text-slate-300">${sim.time} دقيقة</span> </div> </div> </div>`; }); } else { simList.innerHTML = `<div class="text-center p-4 text-slate-400 font-bold">لا توجد محاكيات متاحة حالياً</div>`; } },
+            showSection: (id) => { document.querySelectorAll('.view-section').forEach(e=>e.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); window.scrollTo(0,0); },
             enterVisitor: () => { state.isVIP = false; app.updateStatus(); app.showSection('dashboard'); },
             enterSubscriber: () => { state.pendingAction = null; document.getElementById('subscriber-login-modal').classList.remove('hidden'); },
-            
             updateStatus: (name) => document.getElementById('user-status').innerText = state.isVIP ? `مرحباً، ${name} (VIP) 🌟` : "زائر (صلاحيات محدودة)",
-            
             selectMajor: (m) => { state.major = m; if(m==='Competition') app.selectMinor('ملفات'); else app.showSection('sub-dashboard'); },
-            
-            selectMinor: (m) => {
-                state.minor = m; 
-                document.getElementById('list-title').innerText = m === 'تخصص' ? `تخصص ${state.major}` : m;
-                
-                const isUniversal = ['تربوي', 'جدارات', 'IQ', 'عربي للجميع', 'انجليزي للجميع', 'حاسب آلي', 'معلومات عامة'].includes(m);
-                const files = (db.files||[]).filter(f => {
-                    if(state.major==='Competition') return f.major==='Competition';
-                    if(isUniversal) return f.minor===m;
-                    return f.major===state.major && f.minor===m;
-                });
-                
-                const fBox = document.getElementById('files-box');
-                const fGrid = document.getElementById('files-grid');
-                if(files.length) {
-                    fBox.classList.remove('hidden');
-                    fGrid.innerHTML = files.map(f => {
-                        const locked = f.mode === 'subscriber' && !state.isVIP;
-                        return `
-                        <div onclick="app.openFile('${f.url}', ${locked})" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center cursor-pointer hover:bg-slate-50 transition-colors ${locked?'locked-item':''}">
-                            <div class="flex items-center gap-3">
-                                <div class="bg-red-50 p-2 rounded-lg"><i class="fas fa-file-pdf text-red-500 text-xl"></i></div>
-                                <span class="font-bold text-sm text-slate-700">${f.name}</span>
-                            </div>
-                            <i class="fas ${locked?'fa-lock text-slate-300':'fa-download text-brand-500'}"></i>
-                        </div>`;
-                    }).join('');
-                } else fBox.classList.add('hidden');
-
-                const qBox = document.getElementById('quizzes-box');
-                const qGrid = document.getElementById('quizzes-grid');
-                
-                if(state.major==='Competition') qBox.classList.add('hidden');
-                else {
-                    const quizzes = (db.quizzes||[]).filter(q => {
-                        if(isUniversal) return q.minor===m;
-                        return q.major===state.major && q.minor===m;
-                    });
-                    
-                    if(quizzes.length) {
-                        qBox.classList.remove('hidden');
-                        qGrid.innerHTML = quizzes.map(q => {
-                            const locked = q.mode === 'subscriber' && !state.isVIP;
-                            return `
-                            <div onclick="app.startQuiz(${q.id}, ${locked})" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center cursor-pointer hover:bg-slate-50 transition-colors ${locked?'locked-item':''}">
-                                <div class="flex items-center gap-3">
-                                    <div class="bg-blue-50 p-2 rounded-lg"><i class="fas fa-clipboard-list text-blue-500 text-xl"></i></div>
-                                    <div>
-                                        <h4 class="font-bold text-slate-800">${q.name}</h4>
-                                        <p class="text-[10px] text-slate-400 font-bold">${q.questions?.length||0} سؤال</p>
-                                    </div>
-                                </div>
-                                <i class="fas ${locked?'fa-lock text-red-400':'fa-play-circle text-brand-500'} text-2xl"></i>
-                            </div>`;
-                        }).join('');
-                    } else {
-                        qGrid.innerHTML = '<div class="text-center bg-slate-50 p-6 rounded-2xl border border-slate-200 text-slate-400 font-bold">لا يوجد اختبارات مضافة في هذا القسم بعد</div>';
-                        qBox.classList.remove('hidden');
-                    }
-                }
-                app.showSection('content-list');
-            },
-            
-            openFile: (url, locked) => { 
-                if(locked) { 
-                    state.pendingAction = () => window.open(url, '_blank'); 
-                    document.getElementById('subscriber-login-modal').classList.remove('hidden'); 
-                } else {
-                    window.open(url, '_blank'); 
-                }
-            },
-            
-            startQuiz: (id, locked) => {
-                if(locked) { 
-                    state.pendingAction = () => app.startQuiz(id, false); 
-                    document.getElementById('subscriber-login-modal').classList.remove('hidden'); 
-                    return; 
-                }
-                const q = db.quizzes.find(x => x.id === id);
-                if(!q.questions || !q.questions.length) return app.notify("عذراً، هذا الاختبار لا يحتوي على أسئلة", "error");
-                
-                state.quiz = { questions: q.questions.map(qt => ({...qt, categoryName: q.name})) }; 
-                state.score = 0; state.qIdx = 0; state.answers = new Array(q.questions.length).fill(null);
-                document.getElementById('timer-display').classList.add('hidden');
-                app.showSection('exam-player'); app.renderQ();
-            },
-            
-            startSimulation: (id, locked) => {
-                if(locked) { 
-                    state.pendingAction = () => app.startSimulation(id, false); 
-                    document.getElementById('subscriber-login-modal').classList.remove('hidden'); 
-                    return; 
-                }
-                const sim = db.simulations.find(x => x.id === id);
-                if(!sim) return;
-                
-                let allQs = db.quizzes || [];
-                const getPool = (majorFilter, minorFilter, count, label) => {
-                    let pool = [];
-                    allQs.forEach(q => {
-                        let matchMajor = majorFilter ? q.major === majorFilter : true;
-                        let matchMinor = q.minor === minorFilter;
-                        if(matchMajor && matchMinor && q.questions) pool.push(...q.questions);
-                    });
-                    pool.sort(() => 0.5 - Math.random());
-                    return pool.slice(0, count).map(q => ({ ...q, categoryName: label }));
-                };
-
-                let finalQuestions = [];
-                if(sim.targetMajor) finalQuestions.push(...getPool(sim.targetMajor, 'تخصص', sim.counts.spec, `تخصص: ${sim.targetMajor}`));
-                finalQuestions.push(...getPool(null, 'تربوي', sim.counts.ped, 'أسئلة تربوية'));
-                finalQuestions.push(...getPool(null, 'جدارات', sim.counts.comp, 'الجدارات السلوكية'));
-                finalQuestions.push(...getPool(null, 'IQ', sim.counts.iq, 'IQ والذكاء'));
-                finalQuestions.push(...getPool(null, 'عربي للجميع', sim.counts.ar, 'لغة عربية (عام)'));
-                finalQuestions.push(...getPool(null, 'انجليزي للجميع', sim.counts.en, 'لغة إنجليزية (عام)'));
-                finalQuestions.push(...getPool(null, 'حاسب آلي', sim.counts.cs, 'حاسب آلي'));
-                finalQuestions.push(...getPool(null, 'معلومات عامة', sim.counts.gen, 'معلومات عامة'));
-                
-                if(!finalQuestions.length) return app.notify("لا توجد أسئلة كافية لإنشاء هذا المحاكي", "error");
-                
-                state.quiz = { questions: finalQuestions }; 
-                state.score = 0; state.qIdx = 0; 
-                state.answers = new Array(finalQuestions.length).fill(null);
-                
-                app.startTimer(sim.time);
-                app.showSection('exam-player'); app.renderQ();
-            },
-            
-            startTimer: (min) => {
-                const d = document.getElementById('timer-display'); d.classList.remove('hidden');
-                let t = min * 60;
-                if(state.timerInterval) clearInterval(state.timerInterval);
-                state.timerInterval = setInterval(() => {
-                    let m = Math.floor(t/60);
-                    let s = t%60;
-                    d.innerText = `${m}:${s<10?'0'+s:s}`;
-                    if(t-- <= 0) { 
-                        clearInterval(state.timerInterval); 
-                        app.notify("انتهى الوقت المحدد للاختبار", "error"); 
-                        app.finishExam(); 
-                    }
-                }, 1000);
-            },
-            
-            renderQ: () => {
-                document.getElementById('question-box').classList.remove('hidden');
-                document.getElementById('result-box').classList.add('hidden');
-                
-                const q = state.quiz.questions[state.qIdx];
-                const progress = ((state.qIdx+1)/state.quiz.questions.length*100);
-                
-                document.getElementById('progress-text').innerText = `سؤال ${state.qIdx+1} من ${state.quiz.questions.length}`;
-                document.getElementById('progress-bar').style.width = progress+"%";
-                
-                document.getElementById('question-box').innerHTML = `
-                <div class="bg-white p-8 rounded-[2.5rem] shadow-xl space-y-6 border border-slate-100">
-                    <div class="flex justify-between items-center border-b pb-4">
-                        <span class="text-xs font-black bg-slate-100 text-slate-600 px-4 py-2 rounded-full tracking-wide">${q.categoryName || 'سؤال عام'}</span>
-                    </div>
-                    <h3 class="font-black text-xl md:text-2xl leading-relaxed text-slate-800">${q.text}</h3>
-                    <div class="grid gap-4 mt-6">
-                        ${q.opts.map((o,i)=>`<button onclick="app.ans(${i},this)" class="opt-btn group"><span class="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full border-2 border-slate-200 flex items-center justify-center text-xs text-slate-400 group-hover:border-brand-500 group-hover:text-brand-500 font-bold transition-colors">${['أ','ب','ج','د'][i]}</span><span class="mr-10 block">${o}</span></button>`).join('')}
-                    </div>
-                </div>`;
-            },
-            
-            ans: (i, btn) => {
-                const q = state.quiz.questions[state.qIdx];
-                state.answers[state.qIdx] = i;
-                document.querySelectorAll('.opt-btn').forEach(b=>b.disabled=true);
-                const correctIdx = parseInt(q.correctAnswer);
-                
-                if(i === correctIdx) { 
-                    btn.classList.add('correct'); 
-                    state.score++; 
-                    app.notify("إجابة صحيحة! أحسنت", "success");
-                } else { 
-                    btn.classList.add('wrong'); 
-                    document.querySelectorAll('.opt-btn')[correctIdx].classList.add('correct'); 
-                    app.notify("إجابة خاطئة", "error");
-                }
-                
-                setTimeout(() => { 
-                    if(++state.qIdx < state.quiz.questions.length) app.renderQ(); 
-                    else app.finishExam(); 
-                }, 1500);
-            },
-            
-            finishExam: () => {
-                if(state.timerInterval) clearInterval(state.timerInterval);
-                document.getElementById('question-box').classList.add('hidden');
-                document.getElementById('result-box').classList.remove('hidden');
-                
-                const total = state.quiz.questions.length;
-                const percentage = Math.round(state.score/total*100);
-                
-                let currentScore = 0;
-                const scoreInterval = setInterval(() => {
-                    if(currentScore >= percentage) {
-                        clearInterval(scoreInterval);
-                        document.getElementById('res-score').innerText = percentage + "%";
-                    } else {
-                        currentScore++;
-                        document.getElementById('res-score').innerText = currentScore + "%";
-                    }
-                }, 20);
-
-                let msg = percentage >= 90 ? "ممتاز! مستوى رائع جداً 🌟" : percentage >= 75 ? "جيد جداً! استمر في التقدم 💪" : percentage >= 50 ? "جيد، لكن تحتاج للمزيد من المراجعة 👍" : "تحتاج لمذاكرة مكثفة لتحسين مستواك 📚";
-                document.getElementById('res-msg').innerText = msg;
-                
-                const reviewList = document.getElementById('review-list');
-                reviewList.innerHTML = state.quiz.questions.map((q, idx) => {
-                    const userAnsIdx = state.answers[idx];
-                    const isCorrect = userAnsIdx === q.correctAnswer;
-                    return `
-                    <div class="review-card p-6 rounded-3xl shadow-sm text-right bg-white border border-slate-100 ${isCorrect ? 'correct-ans' : 'wrong-ans'}">
-                        <div class="flex justify-between mb-2">
-                             <span class="text-[10px] font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded-lg">${q.categoryName}</span>
-                             <span class="text-xs font-bold ${isCorrect?'text-green-600':'text-red-500'}">${isCorrect?'صحيحة ✅':'خاطئة ❌'}</span>
-                        </div>
-                        <p class="font-bold text-slate-800 mb-3 text-sm md:text-base leading-relaxed">${idx+1}. ${q.text}</p>
-                        <div class="text-xs space-y-2 bg-slate-50 p-3 rounded-xl">
-                            <p class="${isCorrect ? 'text-green-700' : 'text-red-600'} font-bold flex items-center gap-2">
-                                <span class="opacity-70 w-12">إجابتك:</span> 
-                                <span class="flex-1 border-r-2 border-slate-300 pr-2">${userAnsIdx !== null ? q.opts[userAnsIdx] : "لم يتم الاختيار"}</span>
-                            </p>
-                            ${!isCorrect ? `<p class="text-green-700 font-bold flex items-center gap-2 border-t border-slate-200 pt-2"><span class="opacity-70 w-12">الصحيحة:</span> <span class="flex-1 border-r-2 border-green-300 pr-2">${q.opts[q.correctAnswer]}</span></p>` : ''}
-                        </div>
-                    </div>`;
-                }).join('');
-                
-                window.scrollTo(0,0);
-            }
+            selectMinor: (m) => { state.minor = m; document.getElementById('list-title').innerText = m === 'تخصص' ? `تخصص ${state.major}` : m; const isUniversal = ['تربوي', 'جدارات', 'IQ', 'عربي للجميع', 'انجليزي للجميع', 'حاسب آلي', 'معلومات عامة'].includes(m); const files = (db.files||[]).filter(f => { if(state.major==='Competition') return f.major==='Competition'; if(isUniversal) return f.minor===m; return f.major===state.major && f.minor===m; }); const fBox = document.getElementById('files-box'); const fGrid = document.getElementById('files-grid'); if(files.length) { fBox.classList.remove('hidden'); fGrid.innerHTML = files.map(f => { const locked = f.mode === 'subscriber' && !state.isVIP; return ` <div onclick="app.openFile('${f.url}', ${locked})" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center cursor-pointer hover:bg-slate-50 transition-colors ${locked?'locked-item':''}"> <div class="flex items-center gap-3"> <div class="bg-red-50 p-2 rounded-lg"><i class="fas fa-file-pdf text-red-500 text-xl"></i></div> <span class="font-bold text-sm text-slate-700">${f.name}</span> </div> <i class="fas ${locked?'fa-lock text-slate-300':'fa-download text-brand-500'}"></i> </div>`; }).join(''); } else fBox.classList.add('hidden'); const qBox = document.getElementById('quizzes-box'); const qGrid = document.getElementById('quizzes-grid'); if(state.major==='Competition') qBox.classList.add('hidden'); else { const quizzes = (db.quizzes||[]).filter(q => { if(isUniversal) return q.minor===m; return q.major===state.major && q.minor===m; }); if(quizzes.length) { qBox.classList.remove('hidden'); qGrid.innerHTML = quizzes.map(q => { const locked = q.mode === 'subscriber' && !state.isVIP; return ` <div onclick="app.startQuiz(${q.id}, ${locked})" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center cursor-pointer hover:bg-slate-50 transition-colors ${locked?'locked-item':''}"> <div class="flex items-center gap-3"> <div class="bg-blue-50 p-2 rounded-lg"><i class="fas fa-clipboard-list text-blue-500 text-xl"></i></div> <div> <h4 class="font-bold text-slate-800">${q.name}</h4> <p class="text-[10px] text-slate-400 font-bold">${q.questions?.length||0} سؤال</p> </div> </div> <i class="fas ${locked?'fa-lock text-red-400':'fa-play-circle text-brand-500'} text-2xl"></i> </div>`; }).join(''); } else { qGrid.innerHTML = '<div class="text-center bg-slate-50 p-6 rounded-2xl border border-slate-200 text-slate-400 font-bold">لا يوجد اختبارات مضافة في هذا القسم بعد</div>'; qBox.classList.remove('hidden'); } } app.showSection('content-list'); },
+            openFile: (url, locked) => { if(locked) { state.pendingAction = () => window.open(url, '_blank'); document.getElementById('subscriber-login-modal').classList.remove('hidden'); } else { window.open(url, '_blank'); } },
+            startQuiz: (id, locked) => { if(locked) { state.pendingAction = () => app.startQuiz(id, false); document.getElementById('subscriber-login-modal').classList.remove('hidden'); return; } const q = db.quizzes.find(x => x.id === id); if(!q.questions || !q.questions.length) return app.notify("عذراً، هذا الاختبار لا يحتوي على أسئلة", "error"); state.quiz = { questions: q.questions.map(qt => ({...qt, categoryName: q.name})) }; state.score = 0; state.qIdx = 0; state.answers = new Array(q.questions.length).fill(null); document.getElementById('timer-display').classList.add('hidden'); app.showSection('exam-player'); app.renderQ(); },
+            startSimulation: (id, locked) => { if(locked) { state.pendingAction = () => app.startSimulation(id, false); document.getElementById('subscriber-login-modal').classList.remove('hidden'); return; } const sim = db.simulations.find(x => x.id === id); if(!sim) return; let allQs = db.quizzes || []; const getPool = (majorFilter, minorFilter, count, label) => { let pool = []; allQs.forEach(q => { let matchMajor = majorFilter ? q.major === majorFilter : true; let matchMinor = q.minor === minorFilter; if(matchMajor && matchMinor && q.questions) pool.push(...q.questions); }); pool.sort(() => 0.5 - Math.random()); return pool.slice(0, count).map(q => ({ ...q, categoryName: label })); }; let finalQuestions = []; if(sim.targetMajor) finalQuestions.push(...getPool(sim.targetMajor, 'تخصص', sim.counts.spec, `تخصص: ${sim.targetMajor}`)); finalQuestions.push(...getPool(null, 'تربوي', sim.counts.ped, 'أسئلة تربوية')); finalQuestions.push(...getPool(null, 'جدارات', sim.counts.comp, 'الجدارات السلوكية')); finalQuestions.push(...getPool(null, 'IQ', sim.counts.iq, 'IQ والذكاء')); finalQuestions.push(...getPool(null, 'عربي للجميع', sim.counts.ar, 'لغة عربية (عام)')); finalQuestions.push(...getPool(null, 'انجليزي للجميع', sim.counts.en, 'لغة إنجليزية (عام)')); finalQuestions.push(...getPool(null, 'حاسب آلي', sim.counts.cs, 'حاسب آلي')); finalQuestions.push(...getPool(null, 'معلومات عامة', sim.counts.gen, 'معلومات عامة')); if(!finalQuestions.length) return app.notify("لا توجد أسئلة كافية لإنشاء هذا المحاكي", "error"); state.quiz = { questions: finalQuestions }; state.score = 0; state.qIdx = 0; state.answers = new Array(finalQuestions.length).fill(null); app.startTimer(sim.time); app.showSection('exam-player'); app.renderQ(); },
+            startTimer: (min) => { const d = document.getElementById('timer-display'); d.classList.remove('hidden'); let t = min * 60; if(state.timerInterval) clearInterval(state.timerInterval); state.timerInterval = setInterval(() => { let m = Math.floor(t/60); let s = t%60; d.innerText = `${m}:${s<10?'0'+s:s}`; if(t-- <= 0) { clearInterval(state.timerInterval); app.notify("انتهى الوقت المحدد للاختبار", "error"); app.finishExam(); } }, 1000); },
+            renderQ: () => { document.getElementById('question-box').classList.remove('hidden'); document.getElementById('result-box').classList.add('hidden'); const q = state.quiz.questions[state.qIdx]; const progress = ((state.qIdx+1)/state.quiz.questions.length*100); document.getElementById('progress-text').innerText = `سؤال ${state.qIdx+1} من ${state.quiz.questions.length}`; document.getElementById('progress-bar').style.width = progress+"%"; document.getElementById('question-box').innerHTML = ` <div class="bg-white p-8 rounded-[2.5rem] shadow-xl space-y-6 border border-slate-100"> <div class="flex justify-between items-center border-b pb-4"> <span class="text-xs font-black bg-slate-100 text-slate-600 px-4 py-2 rounded-full tracking-wide">${q.categoryName || 'سؤال عام'}</span> </div> <h3 class="font-black text-xl md:text-2xl leading-relaxed text-slate-800">${q.text}</h3> <div class="grid gap-4 mt-6"> ${q.opts.map((o,i)=>`<button onclick="app.ans(${i},this)" class="opt-btn group"><span class="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full border-2 border-slate-200 flex items-center justify-center text-xs text-slate-400 group-hover:border-brand-500 group-hover:text-brand-500 font-bold transition-colors">${['أ','ب','ج','د'][i]}</span><span class="mr-10 block">${o}</span></button>`).join('')} </div> </div>`; },
+            ans: (i, btn) => { const q = state.quiz.questions[state.qIdx]; state.answers[state.qIdx] = i; document.querySelectorAll('.opt-btn').forEach(b=>b.disabled=true); const correctIdx = parseInt(q.correctAnswer); if(i === correctIdx) { btn.classList.add('correct'); state.score++; app.notify("إجابة صحيحة! أحسنت", "success"); } else { btn.classList.add('wrong'); document.querySelectorAll('.opt-btn')[correctIdx].classList.add('correct'); app.notify("إجابة خاطئة", "error"); } setTimeout(() => { if(++state.qIdx < state.quiz.questions.length) app.renderQ(); else app.finishExam(); }, 1500); },
+            finishExam: () => { if(state.timerInterval) clearInterval(state.timerInterval); document.getElementById('question-box').classList.add('hidden'); document.getElementById('result-box').classList.remove('hidden'); const total = state.quiz.questions.length; const percentage = Math.round(state.score/total*100); let currentScore = 0; const scoreInterval = setInterval(() => { if(currentScore >= percentage) { clearInterval(scoreInterval); document.getElementById('res-score').innerText = percentage + "%"; } else { currentScore++; document.getElementById('res-score').innerText = currentScore + "%"; } }, 20); let msg = percentage >= 90 ? "ممتاز! مستوى رائع جداً 🌟" : percentage >= 75 ? "جيد جداً! استمر في التقدم 💪" : percentage >= 50 ? "جيد، لكن تحتاج للمزيد من المراجعة 👍" : "تحتاج لمذاكرة مكثفة لتحسين مستواك 📚"; document.getElementById('res-msg').innerText = msg; const reviewList = document.getElementById('review-list'); reviewList.innerHTML = state.quiz.questions.map((q, idx) => { const userAnsIdx = state.answers[idx]; const isCorrect = userAnsIdx === q.correctAnswer; return ` <div class="review-card p-6 rounded-3xl shadow-sm text-right bg-white border border-slate-100 ${isCorrect ? 'correct-ans' : 'wrong-ans'}"> <div class="flex justify-between mb-2"> <span class="text-[10px] font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded-lg">${q.categoryName}</span> <span class="text-xs font-bold ${isCorrect?'text-green-600':'text-red-500'}">${isCorrect?'صحيحة ✅':'خاطئة ❌'}</span> </div> <p class="font-bold text-slate-800 mb-3 text-sm md:text-base leading-relaxed">${idx+1}. ${q.text}</p> <div class="text-xs space-y-2 bg-slate-50 p-3 rounded-xl"> <p class="${isCorrect ? 'text-green-700' : 'text-red-600'} font-bold flex items-center gap-2"> <span class="opacity-70 w-12">إجابتك:</span> <span class="flex-1 border-r-2 border-slate-300 pr-2">${userAnsIdx !== null ? q.opts[userAnsIdx] : "لم يتم الاختيار"}</span> </p> ${!isCorrect ? `<p class="text-green-700 font-bold flex items-center gap-2 border-t border-slate-200 pt-2"><span class="opacity-70 w-12">الصحيحة:</span> <span class="flex-1 border-r-2 border-green-300 pr-2">${q.opts[q.correctAnswer]}</span></p>` : ''} </div> </div>`; }).join(''); window.scrollTo(0,0); }
         };
-
         app.init();
     </script> 
  
 </body></html>
-
-
