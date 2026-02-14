@@ -313,7 +313,7 @@
                 };
 
                 db.majors.forEach(m => {
-                    if (m === 'Competition' || m === 'GeneralFiles') return; 
+                    if (m === 'Competition' || m === 'GeneralFiles' || m === 'Universal') return; 
                     const color = getColorForString(m);
                     
                     html += `
@@ -353,11 +353,10 @@
                 app.ensureDataReady(() => {
                     state.major = m; 
                     
-                    // --- DIRECT ACCESS FOR GENERAL FILES (No Sub-sections) ---
                     if (m === 'GeneralFiles') {
-                        state.minor = 'all'; // Special flag
+                        state.minor = 'all'; 
                         document.getElementById('list-title').innerText = "مكتبة الملفات الشاملة";
-                        app.renderFilesDirectly(); // New function for direct filtering
+                        app.renderFilesDirectly(); 
                         return;
                     }
 
@@ -375,10 +374,10 @@
                                 `<button onclick="app.selectMinor('${b}')" class="p-8 bg-white rounded-2xl shadow font-bold hover:bg-slate-50 text-right border-r-4 border-transparent hover:border-brand-500 transition-all text-lg">${b}</button>`
                             ).join('');
                         } else {
-                            buttonsHtml = `<div class="col-span-3 text-center text-slate-400 font-bold p-8">لا توجد أقسام فرعية مضافة</div>`;
+                            buttonsHtml = `<div class="col-span-3 text-center text-slate-400 font-bold p-8">لا توجد أقسام فرعية مضافة لهذا القسم المخصص</div>`;
                         }
                     } else {
-                        // Standard Options
+                        // Standard Options - "Universal" Scope
                         buttonsHtml = `
                             <button onclick="app.selectMinor('تخصص')" class="md:col-span-2 lg:col-span-3 p-8 bg-slate-800 text-white rounded-[2rem] shadow-xl border-r-[8px] border-yellow-400 flex justify-between items-center hover:bg-slate-900 transition-all group"> 
                                 <div class="text-right"> <h4 class="text-3xl font-black mb-1">أسئلة التخصص</h4> <p class="text-slate-400 font-bold text-sm group-hover:text-yellow-400 transition-colors">بنك أسئلة شامل لتخصصك</p> </div> <i class="fas fa-star text-5xl text-yellow-400 group-hover:scale-110 transition-transform"></i> 
@@ -397,7 +396,6 @@
                     app.showSection('sub-dashboard'); 
                 });
             },
-            // Logic to render ONLY files for GeneralFiles major
             renderFilesDirectly: () => {
                 const files = (db.files||[]).filter(f => f.major === 'GeneralFiles'); 
                 
@@ -415,51 +413,55 @@
                     fGrid.innerHTML = '<div class="col-span-2 text-center text-slate-400 p-4 font-bold">لا توجد ملفات حالياً</div>';
                 }
 
-                // Hide quizzes box completely
                 document.getElementById('quizzes-box').classList.add('hidden');
-                
                 app.showSection('content-list');
             },
             selectMinor: (m) => { 
                 state.minor = m; 
                 document.getElementById('list-title').innerText = m === 'تخصص' ? `تخصص ${state.major}` : m; 
-                const isUniversal = ['تربوي', 'جدارات', 'IQ', 'عربي للجميع', 'انجليزي للجميع', 'حاسب آلي', 'معلومات عامة'].includes(m); 
                 
-                const files = (db.files||[]).filter(f => { 
-                    if(isUniversal && db.majorConfigs?.[state.major]?.type !== 'custom') return f.minor===m; 
-                    return f.major===state.major && f.minor===m; 
+                // CHECK if current section is Standard or Custom
+                const currentConfig = db.majorConfigs?.[state.major] || {type: 'standard'};
+                const isCustom = currentConfig.type === 'custom';
+
+                // --- FILTERING LOGIC (STRICT) ---
+                const quizzes = (db.quizzes||[]).filter(q => { 
+                    if (isCustom) {
+                        // In Custom Section: MUST match Major Name AND Minor
+                        return q.major === state.major && q.minor === m;
+                    } else {
+                        // In Standard Section: Minor must match AND Major must be 'Universal' (or legacy undefined)
+                        // This prevents custom copies from showing up here
+                        return q.minor === m && (q.major === 'Universal' || !q.major || q.major === state.major);
+                    }
                 }); 
                 
-                const fBox = document.getElementById('files-box'); 
-                const fGrid = document.getElementById('files-grid'); 
-                if(files.length) { 
-                    fBox.classList.remove('hidden'); 
-                    fGrid.innerHTML = files.map(f => { 
-                        const locked = f.mode === 'subscriber' && !state.isVIP; 
-                        return ` <div onclick="app.openFile('${f.url}', ${locked})" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center cursor-pointer hover:bg-slate-50 transition-colors ${locked?'locked-item':''}"> <div class="flex items-center gap-3"> <div class="bg-red-50 p-2 rounded-lg"><i class="fas fa-file-pdf text-red-500 text-xl"></i></div> <span class="font-bold text-sm text-slate-700">${f.name}</span> </div> <i class="fas ${locked?'fa-lock text-slate-300':'fa-download text-brand-500'}"></i> </div>`; 
-                    }).join(''); 
-                } else fBox.classList.add('hidden'); 
-                
+                // Render Quizzes
                 const qBox = document.getElementById('quizzes-box'); 
                 const qGrid = document.getElementById('quizzes-grid'); 
                 
-                {
-                    const quizzes = (db.quizzes||[]).filter(q => { 
-                        if(isUniversal && db.majorConfigs?.[state.major]?.type !== 'custom') return q.minor===m; 
-                        return q.major===state.major && q.minor===m; 
-                    }); 
-                    
-                    if(quizzes.length) { 
-                        qBox.classList.remove('hidden'); 
-                        qGrid.innerHTML = quizzes.map(q => { 
-                            const locked = q.mode === 'subscriber' && !state.isVIP; 
-                            return ` <div onclick="app.startQuiz(${q.id}, ${locked})" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center cursor-pointer hover:bg-slate-50 transition-colors ${locked?'locked-item':''}"> <div class="flex items-center gap-3"> <div class="bg-blue-50 p-2 rounded-lg"><i class="fas fa-clipboard-list text-blue-500 text-xl"></i></div> <div> <h4 class="font-bold text-slate-800">${q.name}</h4> <p class="text-[10px] text-slate-400 font-bold">${q.questions?.length||0} سؤال</p> </div> </div> <i class="fas ${locked?'fa-lock text-red-400':'fa-play-circle text-brand-500'} text-2xl"></i> </div>`; 
-                        }).join(''); 
-                    } else { 
-                        qGrid.innerHTML = '<div class="text-center bg-slate-50 p-6 rounded-2xl border border-slate-200 text-slate-400 font-bold">لا يوجد اختبارات مضافة في هذا القسم بعد</div>'; 
-                        qBox.classList.remove('hidden'); 
-                    } 
+                if(quizzes.length) { 
+                    qBox.classList.remove('hidden'); 
+                    qGrid.innerHTML = quizzes.map(q => { 
+                        const locked = q.mode === 'subscriber' && !state.isVIP; 
+                        return ` <div onclick="app.startQuiz(${q.id}, ${locked})" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center cursor-pointer hover:bg-slate-50 transition-colors ${locked?'locked-item':''}"> <div class="flex items-center gap-3"> <div class="bg-blue-50 p-2 rounded-lg"><i class="fas fa-clipboard-list text-blue-500 text-xl"></i></div> <div> <h4 class="font-bold text-slate-800">${q.name}</h4> <p class="text-[10px] text-slate-400 font-bold">${q.questions?.length||0} سؤال</p> </div> </div> <i class="fas ${locked?'fa-lock text-red-400':'fa-play-circle text-brand-500'} text-2xl"></i> </div>`; 
+                    }).join(''); 
+                } else { 
+                    qGrid.innerHTML = '<div class="text-center bg-slate-50 p-6 rounded-2xl border border-slate-200 text-slate-400 font-bold">لا يوجد اختبارات مضافة في هذا القسم</div>'; 
+                    qBox.classList.remove('hidden'); 
                 } 
+
+                // Files logic (simplified)
+                const fBox = document.getElementById('files-box');
+                const fGrid = document.getElementById('files-grid');
+                const files = (db.files||[]).filter(f => f.major===state.major && f.minor===m);
+                if(files.length) {
+                     fBox.classList.remove('hidden'); 
+                     fGrid.innerHTML = files.map(f => ` <div onclick="app.openFile('${f.url}', ${f.mode === 'subscriber' && !state.isVIP})" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center cursor-pointer hover:bg-slate-50 transition-colors"> <div class="flex items-center gap-3"> <div class="bg-red-50 p-2 rounded-lg"><i class="fas fa-file-pdf text-red-500 text-xl"></i></div> <span class="font-bold text-sm text-slate-700">${f.name}</span> </div> <i class="fas fa-download text-brand-500"></i> </div>`).join('');
+                } else {
+                    fBox.classList.add('hidden');
+                }
+
                 app.showSection('content-list'); 
             },
             backFromContent: () => {
