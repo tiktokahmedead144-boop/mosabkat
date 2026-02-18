@@ -39,6 +39,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&amp;display=swap" rel="stylesheet"> 
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script> 
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+  
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
   <style>
         body { font-family: 'Cairo', sans-serif; background-color: #f4f7f6; user-select: none; -webkit-user-select: none; }
         .hidden { display: none !important; }
@@ -90,8 +93,14 @@
     <h1 class="text-xl md:text-2xl font-black text-brand-800 cursor-pointer flex items-center gap-2" onclick="location.reload()"> <i class="fas fa-graduation-cap text-brand-500"></i> <span id="ui-site-name">المنصة التعليمية</span> </h1> 
    </div> 
   </nav> 
+  
   <main class="container mx-auto px-4 py-8 space-y-8 min-h-screen"> 
+
    <section id="landing" class="view-section hidden space-y-12"> 
+    <div class="text-center text-slate-600 mb-4 max-w-3xl mx-auto text-sm opacity-50">
+        مرحباً بك في منصة اجتاز التعليمية. نوفر أفضل المحاكيات لاختبارات التنظيم والإدارة، بنوك أسئلة شاملة للتخصص، التربوي، الجدارات السلوكية، حاسب آلي، لغات واختبارات الذكاء IQ. اشترك الآن للوصول إلى كافة الملفات والاختبارات الحصرية.
+    </div>
+
     <div class="text-center space-y-4 pt-8"> 
      <h2 class="text-4xl md:text-7xl font-black text-slate-900 tracking-tight" id="ui-hero-title"></h2> 
      <p class="text-slate-500 font-bold text-xl md:text-2xl max-w-2xl mx-auto" id="ui-hero-desc"></p> 
@@ -198,12 +207,107 @@
      </div> 
     </div> 
    </section> 
+
+   <section id="about-us" class="view-section hidden space-y-6 max-w-4xl mx-auto">
+       <div class="bg-white p-8 md:p-12 rounded-[2rem] shadow-sm border border-slate-100">
+           <div class="flex justify-between items-center mb-8 border-b pb-4">
+               <h2 class="text-3xl font-black text-slate-800"><i class="fas fa-users text-brand-500 ml-2"></i> من نحن</h2>
+               <button onclick="app.showSection('landing')" class="text-slate-500 bg-slate-100 px-4 py-2 rounded-xl font-bold hover:bg-slate-200">العودة للرئيسية</button>
+           </div>
+           <div class="prose prose-slate prose-lg rtl:prose-invert max-w-none space-y-6 text-slate-600 font-bold leading-relaxed text-right">
+               <h3 class="text-2xl font-black text-brand-600 mb-4">مرحباً بك في منصة "اجتاز" التعليمية</h3>
+               <p><strong>"اجتاز"</strong> هي منصة تعليمية وتدريبية إلكترونية متطورة، تأسست برؤية وإشراف <strong>أ. أحمد عيد</strong>، وتهدف بشكل أساسي إلى مساعدة الطلاب والخريجين في التحضير الأمثل للامتحانات التنافسية (مثل مسابقات التنظيم والإدارة) في مختلف التخصصات.</p>
+               <h3 class="text-xl font-black text-slate-800 mt-6"><i class="fas fa-bullseye text-red-500 ml-2"></i> رسالتنا وأهدافنا</h3>
+               <p>ندرك تماماً حجم الضغط الذي يواجهه المتقدمون للامتحانات الرسمية، لذا أخذنا على عاتقنا توفير بيئة محاكاة واقعية تضع المتدرب في أجواء الاختبار الحقيقي. هدفنا هو كسر حاجز الرهبة، وتدريب المشتركين على إدارة الوقت بفاعلية، وقياس مستواهم بشكل دقيق قبل خوض الامتحانات الفعلية.</p>
+               <h3 class="text-xl font-black text-slate-800 mt-6"><i class="fas fa-gem text-blue-500 ml-2"></i> ماذا نقدم؟</h3>
+               <ul class="list-disc list-inside space-y-2 mt-2">
+                   <li><strong>محاكيات ذكية وموقوتة:</strong> اختبارات إلكترونية حصرية وشاملة (تخصص، تربوي، جدارات، حاسب آلي، لغات، وIQ) مصممة بعناية لتدريبك على شكل ونمط الأسئلة.</li>
+                   <li><strong>مكتبة ملفات متكاملة:</strong> تجميعات لأهم المذكرات وملفات الـ PDF التعليمية لتكون مرجعك السريع للمراجعة في مكان واحد.</li>
+                   <li><strong>تقييم فوري:</strong> نظام آلي يمنحك نتيجتك فور انتهاء الاختبار مع إمكانية مراجعة الإجابات الصحيحة والخاطئة للوقوف على نقاط الضعف ومعالجتها.</li>
+               </ul>
+               <h3 class="text-xl font-black text-slate-800 mt-6"><i class="fas fa-handshake text-green-500 ml-2"></i> تواصل مع الإدارة</h3>
+               <p>نعمل دائماً على تطوير المنصة وتحديث المحتوى، ونسعد بتلقي مقترحاتكم واستفساراتكم عبر قنوات التواصل الرسمية:</p>
+               <ul class="list-none space-y-2 mt-2 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                   <li><i class="fas fa-envelope text-brand-500 ml-2"></i> <strong>البريد الإلكتروني:</strong> Ahmedead112233@gmail.com</li>
+                   <li><i class="fas fa-phone text-brand-500 ml-2"></i> <strong>الهاتف / واتساب:</strong> 01126874320</li>
+               </ul>
+           </div>
+       </div>
+   </section>
+
+   <section id="privacy-policy" class="view-section hidden space-y-6 max-w-4xl mx-auto">
+       <div class="bg-white p-8 md:p-12 rounded-[2rem] shadow-sm border border-slate-100">
+           <div class="flex justify-between items-center mb-8 border-b pb-4">
+               <h2 class="text-3xl font-black text-slate-800"><i class="fas fa-shield-alt text-brand-500 ml-2"></i> سياسة الخصوصية</h2>
+               <button onclick="app.showSection('landing')" class="text-slate-500 bg-slate-100 px-4 py-2 rounded-xl font-bold hover:bg-slate-200">العودة للرئيسية</button>
+           </div>
+           <div class="prose prose-slate prose-lg rtl:prose-invert max-w-none space-y-6 text-slate-600 font-bold leading-relaxed text-right">
+               <p>في منصة <strong>"اجتاز"</strong> التعليمية، تعتبر خصوصية زوارنا ومشتركينا من أهم أولوياتنا. توضح وثيقة سياسة الخصوصية هذه أنواع المعلومات الشخصية التي نتلقاها ونجمعها وكيفية استخدامها.</p>
+               <h3 class="text-xl font-black text-slate-800 mt-6">1. ملفات الدخول (Log Files)</h3>
+               <p>مثل العديد من مواقع الويب الأخرى، تستخدم منصة "اجتاز" ملفات الدخول. تشمل المعلومات الموجودة داخل ملفات الدخول عناوين بروتوكول الإنترنت (IP)، نوع المتصفح، مزود خدمة الإنترنت (ISP)، طابع التاريخ/الوقت، صفحات الإحالة/الخروج، وعدد النقرات لتحليل الاتجاهات وإدارة الموقع. هذه المعلومات ليست مرتبطة بأي معلومات لتحديد الهوية الشخصية.</p>
+               <h3 class="text-xl font-black text-slate-800 mt-6">2. ملفات تعريف الارتباط (Cookies)</h3>
+               <p>تستخدم منصة "اجتاز" ملفات تعريف الارتباط (Cookies) لتخزين المعلومات حول تفضيلات الزوار، وتسجيل معلومات خاصة بالمستخدم لتخصيص محتوى صفحة الويب وبناء تجربة تعليمية سلسة.</p>
+               <h3 class="text-xl font-black text-slate-800 mt-6">3. إعلانات جوجل أدسنس (Google AdSense)</h3>
+               <ul class="list-disc list-inside space-y-2 mt-2">
+                   <li>نحن نستخدم شركات إعلان كطرف ثالث (مثل Google) لعرض الإعلانات عندما تزور منصتنا.</li>
+                   <li>بصفتها مورداً خارجياً، تستخدم Google ملفات تعريف الارتباط (Cookies) لعرض الإعلانات على منصتنا.</li>
+                   <li>يتيح استخدام Google لملف تعريف الارتباط DART عرض الإعلانات للمستخدمين بناءً على زيارتهم لمنصتنا.</li>
+                   <li>يمكن للمستخدمين اختيار عدم استخدام ملف تعريف الارتباط DART عن طريق زيارة سياسة إعلانات Google.</li>
+               </ul>
+               <h3 class="text-xl font-black text-slate-800 mt-6">4. موافقتك</h3>
+               <p>باستخدامك لمنصتنا التعليمية "اجتاز"، فإنك توافق بموجب هذا على سياسة الخصوصية الخاصة بنا وتوافق على شروطها.</p>
+               <h3 class="text-xl font-black text-slate-800 mt-6">5. اتصل بنا</h3>
+               <p>إذا كنت بحاجة إلى مزيد من المعلومات أو لديك أية أسئلة حول سياسة الخصوصية، تواصل معنا:</p>
+               <ul class="list-none space-y-2 mt-2 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                   <li><i class="fas fa-envelope text-brand-500 ml-2"></i> <strong>البريد الإلكتروني:</strong> Ahmedead112233@gmail.com</li>
+                   <li><i class="fas fa-phone text-brand-500 ml-2"></i> <strong>الهاتف / واتساب:</strong> 01126874320</li>
+               </ul>
+           </div>
+       </div>
+   </section>
+
+   <section id="terms-of-use" class="view-section hidden space-y-6 max-w-4xl mx-auto">
+       <div class="bg-white p-8 md:p-12 rounded-[2rem] shadow-sm border border-slate-100">
+           <div class="flex justify-between items-center mb-8 border-b pb-4">
+               <h2 class="text-3xl font-black text-slate-800"><i class="fas fa-file-contract text-brand-500 ml-2"></i> شروط الاستخدام</h2>
+               <button onclick="app.showSection('landing')" class="text-slate-500 bg-slate-100 px-4 py-2 rounded-xl font-bold hover:bg-slate-200">العودة للرئيسية</button>
+           </div>
+           <div class="prose prose-slate prose-lg rtl:prose-invert max-w-none space-y-6 text-slate-600 font-bold leading-relaxed text-right">
+               <p>مرحباً بك في منصة <strong>"اجتاز"</strong> التعليمية. باستخدامك لهذه المنصة، فإنك توافق على الالتزام بالشروط والأحكام التالية:</p>
+               <h3 class="text-xl font-black text-slate-800 mt-6">1. حقوق الملكية الفكرية</h3>
+               <ul class="list-disc list-inside space-y-2 mt-2">
+                   <li><strong>الاختبارات والمحاكيات (محتوى حصري):</strong> جميع الأسئلة، الاختبارات الإلكترونية، المحاكيات، الأكواد البرمجية، وتصميم المنصة هي ملكية فكرية حصرية لمنصة "اجتاز". يُمنع منعاً باتاً نسخها أو إعادة نشرها أو استغلالها تجارياً دون إذن مسبق.</li>
+                   <li><strong>الملفات والمذكرات (محتوى غير حصري):</strong> توفر المنصة مجموعة من ملفات (PDF) والمذكرات التعليمية لتسهيل المذاكرة على الطلاب. هذه الملفات تم تجميعها للفائدة العامة ولا تدعي منصة "اجتاز" ملكيتها الحصرية، وتعود حقوقها الفكرية لمؤلفيها الأصليين.</li>
+               </ul>
+               <h3 class="text-xl font-black text-slate-800 mt-6">2. حسابات المشتركين (VIP)</h3>
+               <p>الحساب شخصي ويُسمح باستخدامه من قبل شخص واحد وعلى جهاز واحد فقط في نفس الوقت. مشاركة بيانات الحساب مع أشخاص آخرين تؤدي إلى الإيقاف الفوري للحساب من قبل النظام دون تعويض مالي.</p>
+               <h3 class="text-xl font-black text-slate-800 mt-6">3. إخلاء المسؤولية</h3>
+               <p>منصة "اجتاز" هي أداة تعليمية وتدريبية مساعدة. نحن لا نضمن بشكل قاطع أن اجتيازك للاختبارات على المنصة يعني بالضرورة اجتيازك للامتحانات الرسمية أو الفعلية.</p>
+               <h3 class="text-xl font-black text-slate-800 mt-6">4. إعلانات الجهات الخارجية</h3>
+               <p>نحن نستخدم إعلانات لجهات خارجية (مثل Google). يُمنع أي تلاعب أو استخدام لبرامج تلقائية للنقر على هذه الإعلانات.</p>
+               <h3 class="text-xl font-black text-slate-800 mt-6">5. التواصل والدعم الفني</h3>
+               <p>لأي استفسارات، يمكنكم التواصل مع إدارة المنصة عبر:</p>
+               <ul class="list-none space-y-2 mt-2 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                   <li><i class="fas fa-envelope text-brand-500 ml-2"></i> <strong>البريد الإلكتروني:</strong> Ahmedead112233@gmail.com</li>
+                   <li><i class="fas fa-phone text-brand-500 ml-2"></i> <strong>الهاتف / واتساب:</strong> 01126874320</li>
+               </ul>
+           </div>
+       </div>
+   </section>
   </main> 
+
   <footer class="bg-white border-t py-6 mt-12"> 
-   <div class="container mx-auto px-6 text-center"> 
+   <div class="container mx-auto px-6 flex flex-col items-center justify-center gap-4"> 
+    <div class="flex flex-wrap justify-center gap-4 md:gap-6 text-sm font-bold text-slate-500">
+        <a href="#" onclick="app.showSection('landing'); return false;" class="hover:text-brand-500">الرئيسية</a>
+        <a href="#" onclick="app.showSection('about-us'); return false;" class="hover:text-brand-500">من نحن</a>
+        <a href="#" onclick="app.showSection('privacy-policy'); return false;" class="hover:text-brand-500">سياسة الخصوصية</a>
+        <a href="#" onclick="app.showSection('terms-of-use'); return false;" class="hover:text-brand-500">شروط الاستخدام</a>
+    </div>
     <p id="footer-text" class="text-sm font-bold text-slate-400"></p> 
    </div> 
   </footer> 
+
   <div id="subscriber-login-modal" class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm hidden z-[100] flex items-center justify-center p-4 transition-opacity duration-300"> 
    <div class="bg-white p-8 rounded-[2.5rem] w-full max-w-sm text-center shadow-2xl modal-animate border-4 border-white ring-4 ring-brand-100"> 
     <div class="w-16 h-16 bg-brand-50 rounded-full flex items-center justify-center mx-auto mb-4"> <i class="fas fa-lock text-3xl text-brand-500"></i> 
@@ -220,6 +324,7 @@
     </div> <button onclick="app.loginSubscriber()" class="w-full bg-brand-600 text-white py-4 rounded-xl font-black shadow-lg shadow-brand-500/30 mt-6 hover:bg-brand-700 hover:scale-[1.02] transition-all">تسجيل دخول آمن</button> <button onclick="document.getElementById('subscriber-login-modal').classList.add('hidden')" class="mt-4 text-slate-400 font-bold text-sm hover:text-slate-600">إلغاء والعودة</button> 
    </div> 
   </div> 
+
   <script>
         document.addEventListener('contextmenu', event => event.preventDefault());
         document.onkeydown = function(e) { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) || (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) || (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) { return false; } }
