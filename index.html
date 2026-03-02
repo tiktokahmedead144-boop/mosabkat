@@ -37,9 +37,12 @@
     </script> 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> 
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&amp;display=swap" rel="stylesheet"> 
+  
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script> 
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script> 
+  
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6559290623041201" crossorigin="anonymous"></script> 
+  
   <style>
         body { font-family: 'Cairo', sans-serif; background-color: #f4f7f6; user-select: none; -webkit-user-select: none; }
         .hidden { display: none !important; }
@@ -62,7 +65,6 @@
         .whatsapp-float { background-color: #25D366; }
         .telegram-float { background-color: #0088cc; }
         .facebook-float { background-color: #1877F2; }
-        /* Performance Optimizations */
         .view-section { content-visibility: auto; contain-intrinsic-size: 1px 500px; }
     </style> 
  </head> 
@@ -77,21 +79,29 @@
     <p id="custom-alert-msg" class="text-slate-500 font-bold mb-8 leading-relaxed text-sm"></p> <button onclick="location.reload()" class="w-full bg-slate-800 text-white py-4 rounded-xl font-black shadow-lg hover:bg-slate-900 transition-all transform hover:scale-[1.02]"> <i class="fas fa-redo ml-2"></i> إعادة تحميل الصفحة </button> 
    </div> 
   </div> 
-  <div class="contact-float"> <a id="whatsapp-link" href="#" target="_blank" class="contact-btn whatsapp-float hidden" title="تواصل عبر واتساب"> <i class="fab fa-whatsapp"></i> </a> <a id="telegram-link" href="#" target="_blank" class="contact-btn telegram-float hidden" title="تابعنا على تليجرام"> <i class="fab fa-telegram-plane"></i> </a> <a id="facebook-link" href="#" target="_blank" class="contact-btn facebook-float hidden" title="صفحتنا على فيسبوك"> <i class="fab fa-facebook-f"></i> </a> 
+  
+  <div class="contact-float"> 
+      <a id="whatsapp-link" href="#" target="_blank" class="contact-btn whatsapp-float hidden" title="تواصل عبر واتساب"> <i class="fab fa-whatsapp"></i> </a> 
+      <a id="telegram-link" href="#" target="_blank" class="contact-btn telegram-float hidden" title="تابعنا على تليجرام"> <i class="fab fa-telegram-plane"></i> </a> 
+      <a id="facebook-link" href="#" target="_blank" class="contact-btn facebook-float hidden" title="صفحتنا على فيسبوك"> <i class="fab fa-facebook-f"></i> </a>
   </div> 
+  
   <div id="loading" class="fixed inset-0 bg-white z-[999] flex flex-col items-center justify-center transition-opacity duration-500"> 
    <div class="w-20 h-20 border-8 border-brand-500 border-t-transparent rounded-full animate-spin mb-6"></div> 
    <p id="loading-text" class="font-black text-slate-400 text-lg animate-pulse">جاري تجهيز المنصة...</p> <button id="retry-btn" onclick="location.reload()" class="hidden mt-6 bg-red-50 text-red-500 px-6 py-2 rounded-full font-bold text-sm border border-red-100 hover:bg-red-100"> <i class="fas fa-wifi"></i> إعادة الاتصال </button> 
   </div> 
+  
   <div id="app-banner" class="hidden p-3 bg-gradient-to-r from-slate-900 to-slate-800 text-white sticky top-0 z-50 shadow-lg border-b border-slate-700"> 
    <div class="container mx-auto flex justify-between items-center px-4"> <span class="font-bold text-xs md:text-sm flex items-center gap-2"><i class="fas fa-mobile-alt"></i> <span id="ui-app-text"></span></span> <a id="ui-app-link" href="#" target="_blank" class="bg-yellow-400 text-slate-900 px-5 py-1.5 rounded-full text-xs font-black hover:bg-yellow-300 transition-colors">تنزيل التطبيق</a> 
    </div> 
   </div> 
+  
   <nav class="bg-white border-b-4 border-brand-500 p-4 shadow-sm relative z-40"> 
    <div class="container mx-auto flex justify-between items-center"> 
     <h1 class="text-xl md:text-2xl font-black text-brand-800 cursor-pointer flex items-center gap-2" onclick="location.reload()"> <i class="fas fa-graduation-cap text-brand-500"></i> <span id="ui-site-name">المنصة التعليمية</span> </h1> 
    </div> 
   </nav> 
+  
   <main class="container mx-auto px-4 py-8 space-y-8 min-h-screen"> 
    <section id="landing" class="view-section hidden space-y-12"> 
     <div class="text-center text-slate-600 mb-4 max-w-3xl mx-auto text-sm opacity-50">
@@ -128,6 +138,7 @@
      </div> 
     </div> 
    </section> 
+   
    <section id="dashboard" class="view-section hidden space-y-8 animate-fadeIn"> 
     <div class="bg-white p-6 rounded-3xl shadow-sm flex flex-col md:flex-row justify-between items-center gap-4 border border-slate-100"> 
      <div class="flex items-center gap-3"> 
@@ -135,6 +146,7 @@
       </div> <span id="user-status" class="font-black text-lg text-slate-700"></span> 
      </div> <button onclick="app.logoutForce()" class="bg-red-50 text-red-500 px-6 py-3 rounded-2xl font-bold text-sm hover:bg-red-500 hover:text-white transition-all w-full md:w-auto flex items-center justify-center gap-2"><i class="fas fa-sign-out-alt"></i> خروج آمن</button> 
     </div> 
+    
     <div onclick="app.openSimulationsSection()" class="w-full bg-slate-800 text-white p-8 rounded-[2rem] shadow-lg border-l-8 border-yellow-400 cursor-pointer hover:-translate-y-1 transition-all group relative overflow-hidden"> 
      <div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity"></div> 
      <div class="flex items-center justify-between relative z-10"> 
@@ -150,6 +162,7 @@
       </div> 
      </div> 
     </div> 
+    
     <div onclick="app.openLessonsHub()" class="w-full bg-gradient-to-r from-indigo-700 to-indigo-900 text-white p-8 rounded-[2rem] shadow-lg border-l-8 border-indigo-400 cursor-pointer hover:-translate-y-1 transition-all group relative overflow-hidden mt-4"> 
      <div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity"></div> 
      <div class="flex items-center justify-between relative z-10"> 
@@ -164,33 +177,40 @@
       <div class="bg-indigo-900/50 p-4 rounded-xl hidden md:block"> <i class="fas fa-arrow-left text-2xl text-indigo-300 group-hover:text-white transition-colors"></i> 
       </div> 
      </div> 
-    </div> 
+    </div>
+    
     <div class="text-center py-4 border-t border-slate-200 mt-8 pt-8"> <span class="bg-slate-100 text-slate-500 px-4 py-1 rounded-full text-xs font-bold">بنوك الأسئلة</span> 
      <h2 class="text-3xl font-black text-slate-800 mt-2">الأقسام التدريبية</h2> 
     </div> 
     <div id="majors-grid" class="grid grid-cols-2 md:grid-cols-3 gap-5"></div> 
    </section> 
-   <section id="lessons-hub-view" class="view-section hidden space-y-6"> 
-    <div class="flex justify-between items-center mb-6 bg-white p-4 rounded-2xl shadow-sm border-b-4 border-indigo-500"> 
-     <h3 class="font-black text-xl text-indigo-900 flex items-center gap-2"> <i class="fas fa-book-reader text-indigo-500"></i> مكتبة الشروحات والدروس </h3> <button onclick="app.showSection('dashboard')" class="text-slate-600 bg-slate-100 px-4 py-2 rounded-xl font-bold text-sm hover:bg-slate-200 transition-colors">العودة للرئيسية</button> 
-    </div> 
-    <div class="text-center mb-8"> 
-     <p class="text-slate-500 font-bold">اختر القسم الذي تريد قراءة الشروحات الخاصة به</p> 
-    </div> 
-    <div id="lessons-hub-grid" class="grid grid-cols-2 md:grid-cols-3 gap-5"></div> 
-   </section> 
-   <section id="lessons-category-view" class="view-section hidden space-y-6"> 
-    <div class="flex justify-between items-center mb-6 bg-white p-4 rounded-2xl shadow-sm border-b-4 border-indigo-500"> 
-     <h3 id="lesson-cat-title" class="font-black text-xl text-indigo-900 flex items-center gap-2"></h3> <button onclick="app.openLessonsHub()" class="text-indigo-600 bg-indigo-50 px-4 py-2 rounded-xl font-bold text-sm hover:bg-indigo-100 transition-colors">رجوع للأقسام</button> 
-    </div> 
-    <div id="lessons-list-container" class="space-y-4"></div> 
-   </section> 
+   
+   <section id="lessons-hub-view" class="view-section hidden space-y-6">
+       <div class="flex justify-between items-center mb-6 bg-white p-4 rounded-2xl shadow-sm border-b-4 border-indigo-500">
+           <h3 class="font-black text-xl text-indigo-900 flex items-center gap-2"> <i class="fas fa-book-reader text-indigo-500"></i> مكتبة الشروحات والدروس </h3> 
+           <button onclick="app.showSection('dashboard')" class="text-slate-600 bg-slate-100 px-4 py-2 rounded-xl font-bold text-sm hover:bg-slate-200 transition-colors">العودة للرئيسية</button>
+       </div>
+       <div class="text-center mb-8">
+           <p class="text-slate-500 font-bold">اختر القسم الذي تريد قراءة الشروحات الخاصة به</p>
+       </div>
+       <div id="lessons-hub-grid" class="grid grid-cols-2 md:grid-cols-3 gap-5"></div>
+   </section>
+   
+   <section id="lessons-category-view" class="view-section hidden space-y-6">
+       <div class="flex justify-between items-center mb-6 bg-white p-4 rounded-2xl shadow-sm border-b-4 border-indigo-500">
+           <h3 id="lesson-cat-title" class="font-black text-xl text-indigo-900 flex items-center gap-2"></h3> 
+           <button onclick="app.openLessonsHub()" class="text-indigo-600 bg-indigo-50 px-4 py-2 rounded-xl font-bold text-sm hover:bg-indigo-100 transition-colors">رجوع للأقسام</button>
+       </div>
+       <div id="lessons-list-container" class="space-y-4"></div>
+   </section>
+   
    <section id="simulations-view" class="view-section hidden space-y-6"> 
     <div class="flex justify-between items-center mb-6 bg-white p-4 rounded-2xl shadow-sm"> 
      <h3 class="font-black text-xl text-slate-800 flex items-center gap-2"> <i class="fas fa-bolt text-yellow-500"></i> محاكيات التنظيم والإدارة </h3> <button onclick="app.showSection('dashboard')" class="text-blue-600 bg-blue-50 px-4 py-2 rounded-xl font-bold text-sm hover:bg-blue-100">رجوع للقائمة</button> 
     </div> 
     <div id="simulations-list" class="grid grid-cols-1 gap-4"></div> 
    </section> 
+   
    <section id="sub-dashboard" class="view-section hidden space-y-6"> 
     <div class="flex justify-between items-center mb-6 bg-white p-4 rounded-2xl shadow-sm"> 
      <h3 id="major-title" class="font-black text-xl text-slate-800"></h3> <button onclick="app.showSection('dashboard')" class="text-blue-600 bg-blue-50 px-4 py-2 rounded-xl font-bold text-sm hover:bg-blue-100">تغيير القسم</button> 
@@ -198,10 +218,12 @@
     <div id="sub-sections-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"> 
     </div> 
    </section> 
+   
    <section id="content-list" class="view-section hidden space-y-8"> 
     <div class="flex justify-between items-center mb-4 bg-white p-4 rounded-2xl shadow-sm"> 
      <h3 id="list-title" class="font-black text-lg text-brand-800"></h3> <button onclick="app.backFromContent()" class="bg-slate-100 px-4 py-2 rounded-xl font-bold text-sm text-slate-600 hover:bg-slate-200">رجوع</button> 
     </div> 
+    
     <div id="files-box" class="hidden"> 
      <h4 class="font-black text-red-600 mb-4 flex items-center gap-2 text-xl border-b pb-2"><i class="fas fa-folder-open"></i> الملفات المتاحة:</h4> 
      <div id="files-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div> 
@@ -211,23 +233,43 @@
      <div id="quizzes-grid" class="space-y-4"></div> 
     </div> 
    </section> 
-   <section id="lesson-reader" class="view-section hidden max-w-4xl mx-auto space-y-6 animate-fadeIn"> 
-    <div class="bg-white p-6 md:p-10 rounded-[2rem] shadow-xl border-t-8 border-indigo-500 relative"> 
-     <div class="flex justify-between items-center mb-6 border-b pb-4"> 
-      <div> <span id="reader-category" class="text-xs font-bold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full mb-2 inline-block"></span> 
-       <h2 id="reader-title" class="text-2xl md:text-3xl font-black text-slate-800 leading-tight"></h2> 
-      </div> <button onclick="app.backFromLessonReader()" class="text-slate-500 bg-slate-100 px-4 py-2 rounded-xl font-bold hover:bg-slate-200 transition-colors"><i class="fas fa-times"></i></button> 
-     </div> 
-     <div id="reader-content" class="prose prose-slate prose-lg rtl:prose-invert max-w-none text-slate-700 font-bold leading-loose text-right whitespace-pre-wrap"> 
-     </div> 
-     <div id="reader-quiz-action" class="mt-10 pt-8 border-t-2 border-slate-100 hidden text-center bg-indigo-50/50 p-6 rounded-2xl"> 
-      <div class="w-16 h-16 bg-white shadow-sm rounded-full flex items-center justify-center mx-auto mb-4 border border-indigo-100"> <i class="fas fa-clipboard-check text-2xl text-indigo-500"></i> 
-      </div> 
-      <p class="text-indigo-900 font-black text-xl mb-2">هل أنهيت القراءة وفهمت الدرس؟</p> 
-      <p class="text-slate-500 font-bold mb-6 text-sm">اختبر مستواك الآن في هذا الدرس لترسيخ المعلومة في ذهنك.</p> <button id="reader-start-quiz-btn" class="bg-gradient-to-r from-brand-500 to-brand-600 text-white px-10 py-4 rounded-full font-black shadow-lg hover:scale-105 transition-all text-lg flex items-center justify-center gap-2 mx-auto"> ابدأ الاختبار المرتبط الآن <i class="fas fa-arrow-left"></i> </button> 
-     </div> 
-    </div> 
-   </section> 
+   
+   <section id="lesson-reader" class="view-section hidden max-w-4xl mx-auto space-y-6 animate-fadeIn">
+       <div class="bg-white p-6 md:p-10 rounded-[2rem] shadow-xl border-t-8 border-indigo-500 relative">
+           <div class="flex justify-between items-center mb-6 border-b pb-4">
+               <div>
+                   <span id="reader-category" class="text-xs font-bold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full mb-2 inline-block"></span>
+                   <h2 id="reader-title" class="text-2xl md:text-3xl font-black text-slate-800 leading-tight"></h2>
+               </div>
+               <button onclick="app.backFromLessonReader()" class="text-slate-500 bg-slate-100 px-4 py-2 rounded-xl font-bold hover:bg-slate-200 transition-colors"><i class="fas fa-times"></i></button>
+           </div>
+           
+           <div class="my-4 w-full text-center bg-slate-50 rounded-xl overflow-hidden min-h-[90px] flex items-center justify-center border border-slate-200">
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6559290623041201" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
+           </div>
+           
+           <div id="reader-content" class="prose prose-slate prose-lg rtl:prose-invert max-w-none text-slate-700 font-bold leading-loose text-right whitespace-pre-wrap">
+               </div>
+           
+           <div class="my-6 w-full text-center bg-slate-50 rounded-xl overflow-hidden min-h-[90px] flex items-center justify-center border border-slate-200">
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6559290623041201" data-ad-slot="0987654321" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
+           </div>
+           
+           <div id="reader-quiz-action" class="mt-10 pt-8 border-t-2 border-slate-100 hidden text-center bg-indigo-50/50 p-6 rounded-2xl">
+               <div class="w-16 h-16 bg-white shadow-sm rounded-full flex items-center justify-center mx-auto mb-4 border border-indigo-100">
+                    <i class="fas fa-clipboard-check text-2xl text-indigo-500"></i>
+               </div>
+               <p class="text-indigo-900 font-black text-xl mb-2">هل أنهيت القراءة وفهمت الدرس؟</p>
+               <p class="text-slate-500 font-bold mb-6 text-sm">اختبر مستواك الآن في هذا الدرس لترسيخ المعلومة في ذهنك.</p>
+               <button id="reader-start-quiz-btn" class="bg-gradient-to-r from-brand-500 to-brand-600 text-white px-10 py-4 rounded-full font-black shadow-lg hover:scale-105 transition-all text-lg flex items-center justify-center gap-2 mx-auto">
+                    ابدأ الاختبار المرتبط الآن <i class="fas fa-arrow-left"></i>
+               </button>
+           </div>
+       </div>
+   </section>
+   
    <section id="exam-player" class="view-section hidden max-w-3xl mx-auto space-y-6"> 
     <div class="bg-white p-6 rounded-[2rem] shadow-xl border-t-8 border-brand-500 sticky top-24 z-30"> 
      <div class="flex justify-between mb-4 items-center"> <span id="timer-display" class="font-black text-red-500 text-2xl font-mono hidden tracking-widest bg-red-50 px-3 py-1 rounded-lg">00:00</span> <span id="progress-text" class="text-sm font-black text-brand-700 bg-brand-50 px-3 py-1 rounded-full"></span> <button onclick="app.returnToHome()" class="text-xs font-bold text-red-400 hover:text-red-600 bg-red-50 px-3 py-1 rounded-lg">انسحاب</button> 
@@ -250,6 +292,7 @@
      </div> 
     </div> 
    </section> 
+   
    <section id="about-us" class="view-section hidden space-y-6 max-w-4xl mx-auto"> 
     <div class="bg-white p-8 md:p-12 rounded-[2rem] shadow-sm border border-slate-100"> 
      <div class="flex justify-between items-center mb-8 border-b pb-4"> 
@@ -260,63 +303,40 @@
       <p><strong>"اجتاز"</strong> هي منصة تعليمية وتدريبية إلكترونية متطورة، تهدف بشكل أساسي إلى مساعدة الطلاب والخريجين في التحضير الأمثل للامتحانات التنافسية (مثل مسابقات التنظيم والإدارة) في مختلف التخصصات.</p> 
       <h3 class="text-xl font-black text-slate-800 mt-6"><i class="fas fa-bullseye text-red-500 ml-2"></i> رسالتنا وأهدافنا</h3> 
       <p>ندرك تماماً حجم الضغط الذي يواجهه المتقدمون للامتحانات الرسمية، لذا أخذنا على عاتقنا توفير بيئة محاكاة واقعية تضع المتدرب في أجواء الاختبار الحقيقي. هدفنا هو كسر حاجز الرهبة، وتدريب المشتركين على إدارة الوقت بفاعلية، وقياس مستواهم بشكل دقيق قبل خوض الامتحانات الفعلية.</p> 
-      <h3 class="text-xl font-black text-slate-800 mt-6"><i class="fas fa-gem text-blue-500 ml-2"></i> ماذا نقدم؟</h3> 
-      <ul class="list-disc list-inside space-y-2 mt-2"> 
-       <li><strong>مكتبة الشروحات والدروس:</strong> شروحات نصية ومقالات تعليمية متكاملة تساعد في بناء القاعدة المعرفية.</li> 
-       <li><strong>محاكيات ذكية وموقوتة:</strong> اختبارات إلكترونية حصرية وشاملة (تخصص، تربوي، جدارات، حاسب آلي، لغات، وIQ) مصممة بعناية لتدريبك على شكل ونمط الأسئلة.</li> 
-       <li><strong>مكتبة ملفات متكاملة:</strong> تجميعات لأهم المذكرات وملفات الـ PDF التعليمية لتكون مرجعك السريع للمراجعة في مكان واحد.</li> 
-       <li><strong>تقييم فوري:</strong> نظام آلي يمنحك نتيجتك فور انتهاء الاختبار مع إمكانية مراجعة الإجابات الصحيحة والخاطئة للوقوف على نقاط الضعف ومعالجتها.</li> 
-      </ul> 
-      <h3 class="text-xl font-black text-slate-800 mt-6"><i class="fas fa-handshake text-green-500 ml-2"></i> تواصل مع الإدارة</h3> 
-      <p>نعمل دائماً على تطوير المنصة وتحديث المحتوى، ونسعد بتلقي مقترحاتكم واستفساراتكم عبر قنوات التواصل الرسمية.</p> 
      </div> 
     </div> 
    </section> 
+   
    <section id="privacy-policy" class="view-section hidden space-y-6 max-w-4xl mx-auto"> 
     <div class="bg-white p-8 md:p-12 rounded-[2rem] shadow-sm border border-slate-100"> 
      <div class="flex justify-between items-center mb-8 border-b pb-4"> 
       <h2 class="text-3xl font-black text-slate-800"><i class="fas fa-shield-alt text-brand-500 ml-2"></i> سياسة الخصوصية</h2> <button onclick="app.showSection('landing')" class="text-slate-500 bg-slate-100 px-4 py-2 rounded-xl font-bold hover:bg-slate-200">العودة للرئيسية</button> 
      </div> 
      <div class="prose prose-slate prose-lg rtl:prose-invert max-w-none space-y-6 text-slate-600 font-bold leading-relaxed text-right"> 
-      <p>في منصة <strong>"اجتاز"</strong> التعليمية، تعتبر خصوصية زوارنا ومشتركينا من أهم أولوياتنا. توضح وثيقة سياسة الخصوصية هذه أنواع المعلومات الشخصية التي نتلقاها ونجمعها وكيفية استخدامها.</p> 
-      <h3 class="text-xl font-black text-slate-800 mt-6">1. ملفات الدخول (Log Files)</h3> 
-      <p>مثل العديد من مواقع الويب الأخرى، تستخدم منصة "اجتاز" ملفات الدخول. تشمل المعلومات الموجودة داخل ملفات الدخول عناوين بروتوكول الإنترنت (IP)، نوع المتصفح، مزود خدمة الإنترنت (ISP)، طابع التاريخ/الوقت، صفحات الإحالة/الخروج، وعدد النقرات لتحليل الاتجاهات وإدارة الموقع. هذه المعلومات ليست مرتبطة بأي معلومات لتحديد الهوية الشخصية.</p> 
-      <h3 class="text-xl font-black text-slate-800 mt-6">2. ملفات تعريف الارتباط (Cookies)</h3> 
-      <p>تستخدم منصة "اجتاز" ملفات تعريف الارتباط (Cookies) لتخزين المعلومات حول تفضيلات الزوار، وتسجيل معلومات خاصة بالمستخدم لتخصيص محتوى صفحة الويب وبناء تجربة تعليمية سلسة.</p> 
-      <h3 class="text-xl font-black text-slate-800 mt-6">3. إعلانات جوجل أدسنس (Google AdSense)</h3> 
+      <p>في منصة <strong>"اجتاز"</strong> التعليمية، تعتبر خصوصية زوارنا ومشتركينا من أهم أولوياتنا.</p> 
+      <h3 class="text-xl font-black text-slate-800 mt-6">1. إعلانات جوجل أدسنس (Google AdSense)</h3> 
       <ul class="list-disc list-inside space-y-2 mt-2"> 
        <li>نحن نستخدم شركات إعلان كطرف ثالث (مثل Google) لعرض الإعلانات عندما تزور منصتنا.</li> 
-       <li>بصفتها مورداً خارجياً، تستخدم Google ملفات تعريف الارتباط (Cookies) لعرض الإعلانات على منصتنا.</li> 
-       <li>يتيح استخدام Google لملف تعريف الارتباط DART عرض الإعلانات للمستخدمين بناءً على زيارتهم لمنصتنا.</li> 
-       <li>يمكن للمستخدمين اختيار عدم استخدام ملف تعريف الارتباط DART عن طريق زيارة سياسة إعلانات Google.</li> 
+       <li>بصفتها مورداً خارجياً، تستخدم Google ملفات تعريف الارتباط (Cookies) لعرض الإعلانات.</li> 
       </ul> 
-      <h3 class="text-xl font-black text-slate-800 mt-6">4. موافقتك</h3> 
-      <p>باستخدامك لمنصتنا التعليمية "اجتاز"، فإنك توافق بموجب هذا على سياسة الخصوصية الخاصة بنا وتوافق على شروطها.</p> 
      </div> 
     </div> 
    </section> 
+   
    <section id="terms-of-use" class="view-section hidden space-y-6 max-w-4xl mx-auto"> 
     <div class="bg-white p-8 md:p-12 rounded-[2rem] shadow-sm border border-slate-100"> 
      <div class="flex justify-between items-center mb-8 border-b pb-4"> 
       <h2 class="text-3xl font-black text-slate-800"><i class="fas fa-file-contract text-brand-500 ml-2"></i> شروط الاستخدام</h2> <button onclick="app.showSection('landing')" class="text-slate-500 bg-slate-100 px-4 py-2 rounded-xl font-bold hover:bg-slate-200">العودة للرئيسية</button> 
      </div> 
      <div class="prose prose-slate prose-lg rtl:prose-invert max-w-none space-y-6 text-slate-600 font-bold leading-relaxed text-right"> 
-      <p>مرحباً بك في منصة <strong>"اجتاز"</strong> التعليمية. باستخدامك لهذه المنصة، فإنك توافق على الالتزام بالشروط والأحكام التالية:</p> 
-      <h3 class="text-xl font-black text-slate-800 mt-6">1. حقوق الملكية الفكرية</h3> 
-      <ul class="list-disc list-inside space-y-2 mt-2"> 
-       <li><strong>الاختبارات والمحاكيات (محتوى حصري):</strong> جميع الأسئلة، الاختبارات الإلكترونية، المحاكيات، الأكواد البرمجية، وتصميم المنصة هي ملكية فكرية حصرية لمنصة "اجتاز". يُمنع منعاً باتاً نسخها أو إعادة نشرها أو استغلالها تجارياً دون إذن مسبق.</li> 
-       <li><strong>الملفات والمذكرات (محتوى غير حصري):</strong> توفر المنصة مجموعة من ملفات (PDF) والمذكرات التعليمية لتسهيل المذاكرة على الطلاب. هذه الملفات تم تجميعها للفائدة العامة ولا تدعي منصة "اجتاز" ملكيتها الحصرية، وتعود حقوقها الفكرية لمؤلفيها الأصليين.</li> 
-      </ul> 
-      <h3 class="text-xl font-black text-slate-800 mt-6">2. حسابات المشتركين (VIP)</h3> 
-      <p>الحساب شخصي ويُسمح باستخدامه من قبل شخص واحد وعلى جهاز واحد فقط في نفس الوقت. مشاركة بيانات الحساب مع أشخاص آخرين تؤدي إلى الإيقاف الفوري للحساب من قبل النظام دون تعويض مالي.</p> 
-      <h3 class="text-xl font-black text-slate-800 mt-6">3. إخلاء المسؤولية</h3> 
-      <p>منصة "اجتاز" هي أداة تعليمية وتدريبية مساعدة. نحن لا نضمن بشكل قاطع أن اجتيازك للاختبارات على المنصة يعني بالضرورة اجتيازك للامتحانات الرسمية أو الفعلية.</p> 
-      <h3 class="text-xl font-black text-slate-800 mt-6">4. إعلانات الجهات الخارجية</h3> 
-      <p>نحن نستخدم إعلانات لجهات خارجية (مثل Google). يُمنع أي تلاعب أو استخدام لبرامج تلقائية للنقر على هذه الإعلانات.</p> 
+      <p>مرحباً بك في منصة <strong>"اجتاز"</strong> التعليمية. باستخدامك لهذه المنصة، فإنك توافق على الالتزام بالشروط والأحكام الخاصة بنا.</p> 
+      <h3 class="text-xl font-black text-slate-800 mt-6">حسابات المشتركين (VIP)</h3> 
+      <p>الحساب شخصي ويُسمح باستخدامه من قبل شخص واحد وعلى جهاز واحد فقط في نفس الوقت. مشاركة بيانات الحساب مع أشخاص آخرين تؤدي إلى الإيقاف الفوري للحساب.</p> 
      </div> 
     </div> 
    </section> 
   </main> 
+  
   <footer class="bg-white border-t py-6 mt-12"> 
    <div class="container mx-auto px-6 flex flex-col items-center justify-center gap-4"> 
     <div class="flex flex-wrap justify-center gap-4 md:gap-6 text-sm font-bold text-slate-500"> <a href="#" onclick="app.showSection('landing'); return false;" class="hover:text-brand-500">الرئيسية</a> <a href="#" onclick="app.showSection('about-us'); return false;" class="hover:text-brand-500">من نحن</a> <a href="#" onclick="app.showSection('privacy-policy'); return false;" class="hover:text-brand-500">سياسة الخصوصية</a> <a href="#" onclick="app.showSection('terms-of-use'); return false;" class="hover:text-brand-500">شروط الاستخدام</a> 
@@ -324,6 +344,7 @@
     <p id="footer-text" class="text-sm font-bold text-slate-400"></p> 
    </div> 
   </footer> 
+  
   <div id="subscriber-login-modal" class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm hidden z-[100] flex items-center justify-center p-4 transition-opacity duration-300"> 
    <div class="bg-white p-8 rounded-[2.5rem] w-full max-w-sm text-center shadow-2xl modal-animate border-4 border-white ring-4 ring-brand-100"> 
     <div class="w-16 h-16 bg-brand-50 rounded-full flex items-center justify-center mx-auto mb-4"> <i class="fas fa-lock text-3xl text-brand-500"></i> 
@@ -340,25 +361,62 @@
     </div> <button onclick="app.loginSubscriber()" class="w-full bg-brand-600 text-white py-4 rounded-xl font-black shadow-lg shadow-brand-500/30 mt-6 hover:bg-brand-700 hover:scale-[1.02] transition-all">تسجيل دخول آمن</button> <button onclick="document.getElementById('subscriber-login-modal').classList.add('hidden')" class="mt-4 text-slate-400 font-bold text-sm hover:text-slate-600">إلغاء والعودة</button> 
    </div> 
   </div> 
+  
   <script>
         document.addEventListener('contextmenu', event => event.preventDefault());
         document.onkeydown = function(e) { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) || (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) || (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) { return false; } }
+        
+        // بيانات اتصال فايربيس الجديدة (egtaze)
         const firebaseConfig = {
-        apiKey: "AIzaSyBMQ0_voMQw-_DKdpknhaecl81sU9OTR5Q",
-        authDomain: "egtaz-v2.firebaseapp.com",
-        databaseURL: "https://egtaz-v2-default-rtdb.europe-west1.firebasedatabase.app",
-        projectId: "egtaz-v2",
-        storageBucket: "egtaz-v2.firebasestorage.app",
-        messagingSenderId: "518455288755",
-        appId: "1:518455288755:web:c2b6b9255d727115c621c6"
-         };
+            apiKey: "AIzaSyB2o9xLjKXeb5DOrRQtanr2nlT7gI_6K48",
+            authDomain: "egtaze.firebaseapp.com",
+            databaseURL: "https://egtaze-default-rtdb.firebaseio.com",
+            projectId: "egtaze",
+            storageBucket: "egtaze.firebasestorage.app",
+            messagingSenderId: "564015135816",
+            appId: "1:564015135816:web:e47bfd0f6ac8e98979ec7d"
+        };
 
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const dbRef = database.ref('edu_platform_data');
+        
         let db = { quizzes: [], files: [], simulations: [], settings: {}, users: [], majors: [], majorConfigs: {}, lessons: [], lastUpdated: 0 };
         let state = { isVIP: false, major: '', minor: '', quiz: null, score: 0, qIdx: 0, timerInterval: null, pendingAction: null, answers: [], heavyDataLoaded: false, currentLessonCatId: null, currentLessonCatName: null };
         
+        // نظام التخزين العملاق IndexedDB (لحل مشكلة مساحة المتصفح وإنهاء استنزاف الباقة)
+        const idb = {
+            open: () => new Promise((res, rej) => {
+                const req = indexedDB.open('EgtazPlatformDB', 1);
+                req.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    if(!db.objectStoreNames.contains('cacheStore')) {
+                        db.createObjectStore('cacheStore');
+                    }
+                };
+                req.onsuccess = () => res(req.result);
+                req.onerror = () => rej(req.error);
+            }),
+            set: async (key, val) => {
+                const db = await idb.open();
+                return new Promise((res, rej) => {
+                    const tx = db.transaction('cacheStore', 'readwrite');
+                    tx.objectStore('cacheStore').put(val, key);
+                    tx.oncomplete = () => res();
+                    tx.onerror = () => rej();
+                });
+            },
+            get: async (key) => {
+                const db = await idb.open();
+                return new Promise((res, rej) => {
+                    const tx = db.transaction('cacheStore', 'readonly');
+                    const req = tx.objectStore('cacheStore').get(key);
+                    req.onsuccess = () => res(req.result);
+                    req.onerror = () => rej();
+                });
+            }
+        };
+
         const app = {
             init: () => {
                 setTimeout(() => { const l = document.getElementById('loading'); if(!l.classList.contains('hidden')) { document.getElementById('loading-text').innerText = "يبدو أن الاتصال بطيء..."; document.getElementById('retry-btn').classList.remove('hidden'); } }, 10000);
@@ -447,38 +505,35 @@
                 });
             },
 
-            // دالة جلب البيانات الذكية (تحافظ على الباقة وتحدث المحتوى فوراً)
             loadHeavyData: () => {
-                const cacheKey = 'egtaz_heavy_data_v3';
-                const cacheVersionKey = 'egtaz_data_version';
+                const cacheVersionKey = 'egtaz_data_version_idb';
 
-                database.ref('edu_platform_data/lastUpdated').once('value').then(snap => {
+                database.ref('edu_platform_data/lastUpdated').once('value').then(async snap => {
                     const serverVersion = snap.val() || 0;
                     const localVersion = localStorage.getItem(cacheVersionKey);
-                    const cachedData = localStorage.getItem(cacheKey);
-
-                    if (cachedData && localVersion && parseInt(localVersion) === serverVersion) {
-                        try {
-                            const parsedData = JSON.parse(cachedData);
-                            db.simulations = parsedData.simulations || [];
-                            db.quizzes = parsedData.quizzes || [];
-                            db.files = parsedData.files || [];
-                            db.majorConfigs = parsedData.majorConfigs || {};
-                            db.lessons = parsedData.lessons || [];
+                    
+                    try {
+                        let cachedData = await idb.get('heavyData');
+                        if (cachedData && localVersion && parseInt(localVersion) === serverVersion) {
+                            db.simulations = cachedData.simulations || [];
+                            db.quizzes = cachedData.quizzes || [];
+                            db.files = cachedData.files || [];
+                            db.majorConfigs = cachedData.majorConfigs || {};
+                            db.lessons = cachedData.lessons || [];
                             state.heavyDataLoaded = true;
-                            console.log("تم تحميل البيانات من الكاش (لا يوجد تحديثات جديدة)");
+                            console.log("تم تحميل البيانات من التخزين العميق (لا يوجد استهلاك من الباقة)");
                             return; 
-                        } catch (e) { console.error("خطأ في قراءة الكاش", e); }
-                    }
+                        }
+                    } catch (e) { console.error("خطأ في قراءة الكاش العميق", e); }
 
-                    console.log("يوجد تحديث جديد! جاري تحميل البيانات...");
+                    console.log("يوجد تحديث جديد أو زيارة أولى! جاري تحميل البيانات للحفظ الدائم...");
                     Promise.all([
                         dbRef.child('simulations').once('value'),
                         dbRef.child('quizzes').once('value'),
                         dbRef.child('files').once('value'),
                         dbRef.child('majorConfigs').once('value'),
                         dbRef.child('lessons').once('value')
-                    ]).then(results => {
+                    ]).then(async results => {
                         db.simulations = results[0].val() || [];
                         db.quizzes = results[1].val() || [];
                         db.files = results[2].val() || [];
@@ -487,9 +542,9 @@
 
                         const dataToCache = { simulations: db.simulations, quizzes: db.quizzes, files: db.files, majorConfigs: db.majorConfigs, lessons: db.lessons };
                         try {
-                            localStorage.setItem(cacheKey, JSON.stringify(dataToCache));
+                            await idb.set('heavyData', dataToCache);
                             localStorage.setItem(cacheVersionKey, serverVersion.toString());
-                        } catch(e) { console.warn("مساحة التخزين المؤقت ممتلئة", e); }
+                        } catch(e) { console.warn("مساحة التخزين ممتلئة", e); }
 
                         state.heavyDataLoaded = true;
                     });
@@ -620,7 +675,52 @@
             },
 
             notify: (msg, type='success') => { const t = document.getElementById('toast-notification'); const i = document.getElementById('toast-icon'); const m = document.getElementById('toast-msg'); if(type === 'error') { t.className = 'bg-red-600 text-white shadow-red-500/50'; i.className = 'fas fa-exclamation-triangle'; } else { t.className = 'bg-emerald-600 text-white shadow-emerald-500/50'; i.className = 'fas fa-check-circle'; } m.innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); },
-            loginSubscriber: () => { const uInput = document.getElementById('sub-user').value.trim(); const pInput = document.getElementById('sub-pass').value.trim(); if(!uInput || !pInput) return app.notify("أدخل اسم المستخدم وكلمة المرور", "error"); app.notify("جاري التحقق...", "success"); database.ref('edu_platform_data/users').orderByChild('username').equalTo(uInput).once('value', snap => { if (!snap.exists()) return app.notify("بيانات الدخول غير صحيحة", "error"); let foundUser = null; let foundKey = null; snap.forEach(childSnapshot => { const u = childSnapshot.val(); if(u.password === pInput) { foundUser = u; foundKey = childSnapshot.key; } }); if(!foundUser) return app.notify("كلمة المرور غير صحيحة", "error"); if(!foundUser.isActive) return app.notify("عذراً، هذا الحساب موقوف", "error"); if(Date.now() > foundUser.expiryDate) return app.notify("انتهت صلاحية اشتراكك", "error"); const sessionToken = Date.now() + "_" + Math.random().toString(36).substr(2, 9); database.ref(`edu_platform_data/users/${foundKey}/sessionToken`).set(sessionToken) .then(() => { database.ref(`edu_platform_data/users/${foundKey}/lastLogin`).set(Date.now()); localStorage.setItem('vip_session', sessionToken); localStorage.setItem('vip_uid', foundKey); localStorage.setItem('vip_name', foundUser.username); app.activateVIP(foundUser.username, foundKey); document.getElementById('subscriber-login-modal').classList.add('hidden'); app.notify(`أهلاً بك يا ${foundUser.username} 👋`); }).catch(err => { console.error(err); app.notify("خطأ في بدء الجلسة", "error"); }); }).catch(err => { app.notify("خطأ في الاتصال: " + err.message, "error"); }); },
+            
+            loginSubscriber: () => { 
+                const uInput = document.getElementById('sub-user').value.trim(); 
+                const pInput = document.getElementById('sub-pass').value.trim(); 
+                if(!uInput || !pInput) return app.notify("أدخل اسم المستخدم وكلمة المرور", "error"); 
+                
+                app.notify("جاري التحقق...", "success"); 
+                
+                database.ref('edu_platform_data/users').once('value', snap => { 
+                    if (!snap.exists()) return app.notify("لا يوجد مشتركين مسجلين", "error"); 
+                    
+                    let foundUser = null; 
+                    let foundKey = null; 
+                    
+                    snap.forEach(childSnapshot => { 
+                        const u = childSnapshot.val(); 
+                        if(u && u.username === uInput) { 
+                            foundUser = u; 
+                            foundKey = childSnapshot.key; 
+                        } 
+                    }); 
+                    
+                    if(!foundUser) return app.notify("اسم المستخدم غير صحيح", "error"); 
+                    if(foundUser.password !== pInput) return app.notify("كلمة المرور غير صحيحة", "error"); 
+                    if(!foundUser.isActive) return app.notify("عذراً، هذا الحساب موقوف من قبل الإدارة", "error"); 
+                    if(Date.now() > foundUser.expiryDate) return app.notify("انتهت صلاحية اشتراكك", "error"); 
+                    
+                    const sessionToken = Date.now() + "_" + Math.random().toString(36).substr(2, 9); 
+                    database.ref(`edu_platform_data/users/${foundKey}/sessionToken`).set(sessionToken) 
+                    .then(() => { 
+                        database.ref(`edu_platform_data/users/${foundKey}/lastLogin`).set(Date.now()); 
+                        localStorage.setItem('vip_session', sessionToken); 
+                        localStorage.setItem('vip_uid', foundKey); 
+                        localStorage.setItem('vip_name', foundUser.username); 
+                        app.activateVIP(foundUser.username, foundKey); 
+                        document.getElementById('subscriber-login-modal').classList.add('hidden'); 
+                        app.notify(`أهلاً بك يا ${foundUser.username} 👋`); 
+                    }).catch(err => { 
+                        console.error(err); 
+                        app.notify("خطأ في بدء الجلسة", "error"); 
+                    }); 
+                }).catch(err => { 
+                    app.notify("خطأ في الاتصال: " + err.message, "error"); 
+                }); 
+            },
+
             checkSession: () => { 
                 const localToken = localStorage.getItem('vip_session'); 
                 const localUid = localStorage.getItem('vip_uid'); 
