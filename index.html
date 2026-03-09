@@ -3,7 +3,7 @@
  <head> 
   <meta charset="UTF-8"> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-  <title> منصة اجتاز التعليمية | الملفات والاختبارات </title> 
+  <title> منصة إجتاز التعليمية | مسابقات التنظيم والإدارة </title> 
   <meta name="google-site-verification" content="LLzp3UNUYXfnzmQ0ekP_C-vZq-7iiplrFt4F6hH7wqE"> 
   <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script> 
   <script>
@@ -64,8 +64,8 @@
         .telegram-float { background-color: #0088cc; }
         .facebook-float { background-color: #1877F2; }
         .view-section { content-visibility: auto; contain-intrinsic-size: 1px 500px; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* تأثيرات إضافية للصورة */
         .q-image-container img {
             max-height: 250px;
             object-fit: contain;
@@ -100,13 +100,13 @@
   </div> 
   <nav class="bg-white border-b-4 border-brand-500 p-4 shadow-sm relative z-40"> 
    <div class="container mx-auto flex justify-between items-center"> 
-    <h1 class="text-xl md:text-2xl font-black text-brand-800 cursor-pointer flex items-center gap-2" onclick="location.reload()"> <i class="fas fa-graduation-cap text-brand-500"></i> <span id="ui-site-name">المنصة التعليمية</span> </h1> 
+    <h1 class="text-xl md:text-2xl font-black text-brand-800 cursor-pointer flex items-center gap-2" onclick="location.reload()"> <i class="fas fa-graduation-cap text-brand-500"></i> <span id="ui-site-name">منصة اجتاز محاكي التنظيم والإدارة</span> </h1> 
    </div> 
   </nav> 
   <main class="container mx-auto px-4 py-8 space-y-8 min-h-screen"> 
    <section id="landing" class="view-section hidden space-y-12"> 
     <div class="text-center text-slate-600 mb-4 max-w-3xl mx-auto text-sm opacity-50">
-      مرحباً بك في منصة اجتاز التعليمية. نوفر أفضل المحاكيات لاختبارات التنظيم والإدارة، بنوك أسئلة شاملة للتخصص، التربوي، الجدارات السلوكية، حاسب آلي، لغات واختبارات الذكاء IQ. اشترك الآن للوصول إلى كافة الملفات والاختبارات الحصرية. 
+      مرحباً بك في منصة إجتاز التعليمية. نوفر أفضل المحاكيات لاختبارات التنظيم والإدارة، بنوك أسئلة شاملة للتخصص، التربوي، الجدارات السلوكية، حاسب آلي، لغات واختبارات الذكاء IQ. اشترك الآن للوصول إلى كافة الملفات والاختبارات الحصرية. 
     </div> 
     <div class="text-center space-y-4 pt-8"> 
      <h2 class="text-4xl md:text-7xl font-black text-slate-900 tracking-tight" id="ui-hero-title"></h2> 
@@ -136,6 +136,15 @@
        <h3 class="text-3xl font-black text-brand-800" id="ui-btn-sub">دخول المشتركين</h3> 
        <p class="text-green-600/70 font-bold mt-2 text-sm">للوصول الكامل لكل الاختبارات</p> 
       </div> 
+     </div> 
+    </div> 
+    <div id="reviews-section" class="mt-16 border-t-2 border-slate-100 pt-16 w-full block"> 
+     <div class="text-center mb-10 flex flex-col items-center gap-4"> 
+      <div> <span class="bg-yellow-100 text-yellow-700 px-4 py-1 rounded-full text-xs font-black">آراء المشتركين</span> 
+       <h2 class="text-3xl font-black text-slate-800 mt-3">ماذا يقول طلابنا؟ ⭐</h2> 
+      </div> <button onclick="app.openReviewModal()" class="bg-slate-900 text-white px-8 py-3 rounded-2xl font-black hover:bg-slate-800 hover:-translate-y-1 transition-all shadow-lg shadow-slate-900/20 flex items-center gap-2"> <i class="fas fa-plus-circle text-yellow-400"></i> أضف تقييمك الآن </button> 
+     </div> 
+     <div id="reviews-container" class="flex gap-6 overflow-x-auto pb-8 snap-x no-scrollbar px-2 w-full" style="scroll-snap-type: x mandatory;"> 
      </div> 
     </div> 
    </section> 
@@ -190,9 +199,18 @@
     </div> 
     <div id="lessons-hub-grid" class="grid grid-cols-2 md:grid-cols-3 gap-5"></div> 
    </section> 
+   <section id="lessons-majors-view" class="view-section hidden space-y-6"> 
+    <div class="flex justify-between items-center mb-6 bg-white p-4 rounded-2xl shadow-sm border-b-4 border-indigo-500"> 
+     <h3 class="font-black text-xl text-indigo-900 flex items-center gap-2"> <i class="fas fa-layer-group text-indigo-500"></i> أقسام التخصص </h3> <button onclick="app.openLessonsHub()" class="text-indigo-600 bg-indigo-50 px-4 py-2 rounded-xl font-bold text-sm hover:bg-indigo-100 transition-colors">رجوع للمكتبة</button> 
+    </div> 
+    <div class="text-center mb-8"> 
+     <p class="text-slate-500 font-bold">اختر تخصصك لعرض الشروحات الخاصة به</p> 
+    </div> 
+    <div id="lessons-majors-grid" class="grid grid-cols-2 md:grid-cols-3 gap-5"></div> 
+   </section> 
    <section id="lessons-category-view" class="view-section hidden space-y-6"> 
     <div class="flex justify-between items-center mb-6 bg-white p-4 rounded-2xl shadow-sm border-b-4 border-indigo-500"> 
-     <h3 id="lesson-cat-title" class="font-black text-xl text-indigo-900 flex items-center gap-2"></h3> <button onclick="app.openLessonsHub()" class="text-indigo-600 bg-indigo-50 px-4 py-2 rounded-xl font-bold text-sm hover:bg-indigo-100 transition-colors">رجوع للأقسام</button> 
+     <h3 id="lesson-cat-title" class="font-black text-xl text-indigo-900 flex items-center gap-2"></h3> <button id="lesson-cat-back-btn" class="text-indigo-600 bg-indigo-50 px-4 py-2 rounded-xl font-bold text-sm hover:bg-indigo-100 transition-colors">رجوع للأقسام</button> 
     </div> 
     <div id="lessons-list-container" class="space-y-4"></div> 
    </section> 
@@ -275,8 +293,8 @@
       <h2 class="text-3xl font-black text-slate-800"><i class="fas fa-users text-brand-500 ml-2"></i> من نحن</h2> <button onclick="app.showSection('landing')" class="text-slate-500 bg-slate-100 px-4 py-2 rounded-xl font-bold hover:bg-slate-200">العودة للرئيسية</button> 
      </div> 
      <div class="prose prose-slate prose-lg rtl:prose-invert max-w-none space-y-6 text-slate-600 font-bold leading-relaxed text-right"> 
-      <h3 class="text-2xl font-black text-brand-600 mb-4">مرحباً بك في منصة "اجتاز" التعليمية</h3> 
-      <p><strong>"اجتاز"</strong> هي منصة تعليمية وتدريبية إلكترونية متطورة، تهدف بشكل أساسي إلى مساعدة الطلاب والخريجين في التحضير الأمثل للامتحانات التنافسية (مثل مسابقات التنظيم والإدارة) في مختلف التخصصات.</p> 
+      <h3 class="text-2xl font-black text-brand-600 mb-4">مرحباً بك في منصة "إجتاز" التعليمية</h3> 
+      <p><strong>"إجتاز"</strong> هي منصة تعليمية وتدريبية إلكترونية متطورة، تهدف بشكل أساسي إلى مساعدة الطلاب والخريجين في التحضير الأمثل للامتحانات التنافسية (مثل مسابقات التنظيم والإدارة) في مختلف التخصصات.</p> 
       <h3 class="text-xl font-black text-slate-800 mt-6"><i class="fas fa-bullseye text-red-500 ml-2"></i> رسالتنا وأهدافنا</h3> 
       <p>ندرك تماماً حجم الضغط الذي يواجهه المتقدمون للامتحانات الرسمية، لذا أخذنا على عاتقنا توفير بيئة محاكاة واقعية تضع المتدرب في أجواء الاختبار الحقيقي. هدفنا هو كسر حاجز الرهبة، وتدريب المشتركين على إدارة الوقت بفاعلية، وقياس مستواهم بشكل دقيق قبل خوض الامتحانات الفعلية.</p> 
      </div> 
@@ -288,7 +306,7 @@
       <h2 class="text-3xl font-black text-slate-800"><i class="fas fa-shield-alt text-brand-500 ml-2"></i> سياسة الخصوصية</h2> <button onclick="app.showSection('landing')" class="text-slate-500 bg-slate-100 px-4 py-2 rounded-xl font-bold hover:bg-slate-200">العودة للرئيسية</button> 
      </div> 
      <div class="prose prose-slate prose-lg rtl:prose-invert max-w-none space-y-6 text-slate-600 font-bold leading-relaxed text-right"> 
-      <p>في منصة <strong>"اجتاز"</strong> التعليمية، تعتبر خصوصية زوارنا ومشتركينا من أهم أولوياتنا.</p> 
+      <p>في منصة <strong>"إجتاز"</strong> التعليمية، تعتبر خصوصية زوارنا ومشتركينا من أهم أولوياتنا.</p> 
       <h3 class="text-xl font-black text-slate-800 mt-6">1. إعلانات جوجل أدسنس (Google AdSense)</h3> 
       <ul class="list-disc list-inside space-y-2 mt-2"> 
        <li>نحن نستخدم شركات إعلان كطرف ثالث (مثل Google) لعرض الإعلانات عندما تزور منصتنا.</li> 
@@ -303,7 +321,7 @@
       <h2 class="text-3xl font-black text-slate-800"><i class="fas fa-file-contract text-brand-500 ml-2"></i> شروط الاستخدام</h2> <button onclick="app.showSection('landing')" class="text-slate-500 bg-slate-100 px-4 py-2 rounded-xl font-bold hover:bg-slate-200">العودة للرئيسية</button> 
      </div> 
      <div class="prose prose-slate prose-lg rtl:prose-invert max-w-none space-y-6 text-slate-600 font-bold leading-relaxed text-right"> 
-      <p>مرحباً بك في منصة <strong>"اجتاز"</strong> التعليمية. باستخدامك لهذه المنصة، فإنك توافق على الالتزام بالشروط والأحكام الخاصة بنا.</p> 
+      <p>مرحباً بك في منصة <strong>"إجتاز"</strong> التعليمية. باستخدامك لهذه المنصة، فإنك توافق على الالتزام بالشروط والأحكام الخاصة بنا.</p> 
       <h3 class="text-xl font-black text-slate-800 mt-6">حسابات المشتركين (VIP)</h3> 
       <p>الحساب شخصي ويُسمح باستخدامه من قبل شخص واحد وعلى جهاز واحد فقط في نفس الوقت. مشاركة بيانات الحساب مع أشخاص آخرين تؤدي إلى الإيقاف الفوري للحساب.</p> 
      </div> 
@@ -317,6 +335,31 @@
     <p id="footer-text" class="text-sm font-bold text-slate-400"></p> 
    </div> 
   </footer> 
+  <div id="announcement-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm hidden z-[150] flex items-center justify-center p-4 transition-opacity duration-300"> 
+   <div class="bg-white p-8 rounded-[2.5rem] w-full max-w-md text-center shadow-2xl modal-animate relative border-t-8 border-blue-500 overflow-hidden"> <button onclick="document.getElementById('announcement-modal').classList.add('hidden')" class="absolute top-4 left-4 w-8 h-8 bg-slate-100 rounded-full text-slate-500 hover:bg-slate-200 flex items-center justify-center"><i class="fas fa-times"></i></button> 
+    <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4"> <i class="fas fa-bullhorn text-4xl text-blue-500 animate-pulse"></i> 
+    </div> 
+    <h3 class="text-2xl font-black mb-2 text-slate-800">تحديث هام</h3> 
+    <p id="ann-modal-text" class="text-slate-600 font-bold leading-relaxed text-lg mb-6 whitespace-pre-wrap"></p> <button onclick="document.getElementById('announcement-modal').classList.add('hidden')" class="w-full bg-blue-600 text-white py-4 rounded-xl font-black shadow-lg hover:bg-blue-700 transition-all hover:scale-[1.02]">حسناً، فهمت</button> 
+   </div> 
+  </div> 
+  <div id="add-review-modal" class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm hidden z-[160] flex items-center justify-center p-4 transition-opacity duration-300"> 
+   <div class="bg-white p-8 rounded-[2.5rem] w-full max-w-md text-center shadow-2xl modal-animate border-4 border-white ring-4 ring-yellow-100"> 
+    <h3 class="text-2xl font-black mb-2 text-slate-800">أضف تقييمك للمنصة</h3> 
+    <p class="text-slate-400 text-sm mb-6 font-bold">رأيك يهمنا ويساعدنا على التطور!</p> 
+    <div class="space-y-4 text-right"> 
+     <div> <label class="block text-slate-700 font-bold mb-2">الاسم (اختياري للزوار):</label> 
+      <input type="text" id="review-name" placeholder="اكتب اسمك هنا" class="w-full border-2 border-slate-200 p-3 rounded-xl font-bold outline-none focus:border-yellow-500 focus:ring-4 focus:ring-yellow-500/10 transition-all bg-slate-50 focus:bg-white"> 
+     </div> 
+     <div> <label class="block text-slate-700 font-bold mb-2 text-center">التقييم:</label> 
+      <div class="flex justify-center gap-2 text-4xl flex-row-reverse" id="star-rating"> <i class="fas fa-star cursor-pointer text-slate-300 hover:text-yellow-400 transition-colors" data-val="5" onclick="app.selectStar(5)"></i> <i class="fas fa-star cursor-pointer text-slate-300 hover:text-yellow-400 transition-colors" data-val="4" onclick="app.selectStar(4)"></i> <i class="fas fa-star cursor-pointer text-slate-300 hover:text-yellow-400 transition-colors" data-val="3" onclick="app.selectStar(3)"></i> <i class="fas fa-star cursor-pointer text-slate-300 hover:text-yellow-400 transition-colors" data-val="2" onclick="app.selectStar(2)"></i> <i class="fas fa-star cursor-pointer text-slate-300 hover:text-yellow-400 transition-colors" data-val="1" onclick="app.selectStar(1)"></i> 
+      </div> 
+     </div> 
+     <div> <label class="block text-slate-700 font-bold mb-2">رأيك بصراحة:</label> <textarea id="review-text" rows="3" placeholder="اكتب رأيك أو اقتراحك هنا..." class="w-full border-2 border-slate-200 p-3 rounded-xl font-bold outline-none focus:border-yellow-500 focus:ring-4 focus:ring-yellow-500/10 transition-all bg-slate-50 focus:bg-white"></textarea> 
+     </div> 
+    </div> <button onclick="app.submitReview()" class="w-full bg-yellow-500 text-white py-4 rounded-xl font-black shadow-lg shadow-yellow-500/30 mt-6 hover:bg-yellow-600 transition-all">إرسال التقييم للإدارة</button> <button onclick="document.getElementById('add-review-modal').classList.add('hidden')" class="mt-4 text-slate-400 font-bold text-sm hover:text-slate-600">إلغاء</button> 
+   </div> 
+  </div> 
   <div id="subscriber-login-modal" class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm hidden z-[100] flex items-center justify-center p-4 transition-opacity duration-300"> 
    <div class="bg-white p-8 rounded-[2.5rem] w-full max-w-sm text-center shadow-2xl modal-animate border-4 border-white ring-4 ring-brand-100"> 
     <div class="w-16 h-16 bg-brand-50 rounded-full flex items-center justify-center mx-auto mb-4"> <i class="fas fa-lock text-3xl text-brand-500"></i> 
@@ -338,21 +381,21 @@
         document.onkeydown = function(e) { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) || (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) || (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) { return false; } }
         
         const firebaseConfig = {
-  apiKey: "AIzaSyAFBdUCjde1MuTMmaZjC3J1xkPM-4f47Us",
-  authDomain: "egtazsh5.firebaseapp.com",
-  databaseURL: "https://egtazsh5-default-rtdb.firebaseio.com",
-  projectId: "egtazsh5",
-  storageBucket: "egtazsh5.firebasestorage.app",
-  messagingSenderId: "892841233558",
-  appId: "1:892841233558:web:859f41285d8626d4d686b7"
-};
+          apiKey: "AIzaSyAFBdUCjde1MuTMmaZjC3J1xkPM-4f47Us",
+          authDomain: "egtazsh5.firebaseapp.com",
+          databaseURL: "https://egtazsh5-default-rtdb.firebaseio.com",
+          projectId: "egtazsh5",
+          storageBucket: "egtazsh5.firebasestorage.app",
+          messagingSenderId: "892841233558",
+          appId: "1:892841233558:web:859f41285d8626d4d686b7"
+        };
 
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const dbRef = database.ref('edu_platform_data');
         
-        let db = { quizzes: [], files: [], simulations: [], settings: {}, users: [], majors: [], majorConfigs: {}, lessons: [], lastUpdated: 0 };
-        let state = { isVIP: false, major: '', minor: '', quiz: null, score: 0, qIdx: 0, timerInterval: null, pendingAction: null, answers: [], heavyDataLoaded: false, currentLessonCatId: null, currentLessonCatName: null };
+        let db = { quizzes: [], files: [], simulations: [], settings: {}, users: [], majors: [], majorConfigs: {}, lessons: [], announcement: {}, reviews: {}, lastUpdated: 0 };
+        let state = { isVIP: false, major: '', minor: '', quiz: null, score: 0, qIdx: 0, timerInterval: null, pendingAction: null, answers: [], heavyDataLoaded: false, currentLessonCatId: null, currentLessonCatName: null, currentLessonMajorFilter: null, selectedStars: 5 };
         
         const idb = {
             open: () => new Promise((res, rej) => {
@@ -394,6 +437,18 @@
 
                 dbRef.child('settings').once('value').then(snap => {
                     db.settings = snap.val() || {};
+                    
+                    database.ref('edu_platform_data/announcement').once('value').then(aSnap => {
+                        db.announcement = aSnap.val() || null;
+                        app.checkAnnouncement();
+                    });
+                    
+                    // استماع مباشر لآراء المشتركين لعرضها لحظياً
+                    database.ref('edu_platform_data/reviews').on('value', rSnap => {
+                        db.reviews = rSnap.val() || {};
+                        app.renderReviews();
+                    });
+                    
                     const loader = document.getElementById('loading');
                     loader.style.opacity = '0';
                     setTimeout(() => loader.classList.add('hidden'), 500); 
@@ -414,6 +469,117 @@
                         app.loadHeavyData(); 
                     }
                 }).catch(err => { console.error(err); document.getElementById('loading-text').innerText = "خطأ في الاتصال، تأكد من الإنترنت"; document.getElementById('retry-btn').classList.remove('hidden'); });
+            },
+
+            checkAnnouncement: () => {
+                const ann = db.announcement;
+                if (ann && ann.isActive && ann.text && ann.expiryDate > Date.now()) {
+                    const lastSeenId = localStorage.getItem('last_seen_ann');
+                    const currentAnnId = ann.expiryDate.toString(); 
+                    if (lastSeenId !== currentAnnId) {
+                        document.getElementById('ann-modal-text').innerText = ann.text;
+                        document.getElementById('announcement-modal').classList.remove('hidden');
+                        localStorage.setItem('last_seen_ann', currentAnnId);
+                    }
+                }
+            },
+
+            openReviewModal: () => {
+                document.getElementById('add-review-modal').classList.remove('hidden');
+                const nameInput = document.getElementById('review-name');
+                document.getElementById('review-text').value = '';
+                
+                if (state.isVIP) {
+                    nameInput.value = localStorage.getItem('vip_name') || '';
+                    nameInput.disabled = true;
+                    nameInput.classList.add('opacity-70', 'cursor-not-allowed');
+                } else {
+                    nameInput.value = '';
+                    nameInput.disabled = false;
+                    nameInput.classList.remove('opacity-70', 'cursor-not-allowed');
+                }
+                app.selectStar(5); 
+            },
+
+            selectStar: (n) => {
+                state.selectedStars = n;
+                const stars = document.getElementById('star-rating').querySelectorAll('i');
+                stars.forEach(star => {
+                    const val = parseInt(star.getAttribute('data-val'));
+                    if (val <= n) {
+                        star.classList.remove('text-slate-300');
+                        star.classList.add('text-yellow-400');
+                    } else {
+                        star.classList.remove('text-yellow-400');
+                        star.classList.add('text-slate-300');
+                    }
+                });
+            },
+
+            submitReview: () => {
+                let nameInput = document.getElementById('review-name').value.trim();
+                const textInput = document.getElementById('review-text').value.trim();
+                
+                if (!textInput) {
+                    return app.notify("الرجاء كتابة رأيك أولاً في المربع المخصص", "error");
+                }
+                
+                if (!nameInput) {
+                    nameInput = 'زائر مستخدم للمنصة';
+                }
+
+                app.notify("جاري إرسال التقييم...", "success");
+
+                const newReview = {
+                    name: state.isVIP ? (localStorage.getItem('vip_name') || nameInput) : nameInput,
+                    text: textInput,
+                    stars: state.selectedStars,
+                    date: Date.now(),
+                    isVIP: state.isVIP,
+                    status: 'pending' // معلق حتى توافق عليه من لوحة الإدارة
+                };
+
+                database.ref('edu_platform_data/reviews').push(newReview)
+                .then(() => {
+                    document.getElementById('add-review-modal').classList.add('hidden');
+                    app.notify("تم إرسال تقييمك بنجاح! سيتم مراجعته وعرضه قريباً شكراً لك 🌟", "success");
+                }).catch(err => {
+                    console.error(err);
+                    app.notify("حدث خطأ أثناء إرسال التقييم، الرجاء المحاولة لاحقاً", "error");
+                });
+            },
+
+            renderReviews: () => {
+                const container = document.getElementById('reviews-container');
+                if(!container) return;
+                
+                const approvedReviews = db.reviews ? Object.values(db.reviews).filter(r => r.status === 'approved') : [];
+                approvedReviews.sort((a,b) => (b.date || 0) - (a.date || 0));
+                
+                if(approvedReviews.length > 0) {
+                    container.innerHTML = approvedReviews.map(r => {
+                        const starsHtml = '⭐'.repeat(r.stars || 5);
+                        const badgeHtml = r.isVIP ? '<span class="text-[10px] bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full font-black inline-block mt-1">👑 VIP</span>' : '<span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-1 rounded-full font-bold inline-block mt-1">👤 زائر</span>';
+                        const replyHtml = r.reply ? `<div class="bg-indigo-50/70 border border-indigo-100 p-3 rounded-xl mt-4"><p class="text-[10px] font-black text-indigo-800 mb-1"><i class="fas fa-reply"></i> رد الإدارة:</p><p class="text-xs text-indigo-700 font-bold leading-relaxed">${r.reply}</p></div>` : '';
+                        return `
+                            <div class="min-w-[300px] md:min-w-[350px] bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border border-slate-100 snap-center shrink-0 border-r-4 border-yellow-400 relative">
+                                <i class="fas fa-quote-left absolute top-6 left-6 text-4xl text-slate-50 opacity-50 pointer-events-none"></i>
+                                <div class="flex items-start gap-3 mb-4 relative z-10">
+                                    <div class="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center text-slate-400 font-black text-xl shrink-0"><i class="fas fa-user"></i></div>
+                                    <div>
+                                        <h4 class="font-black text-slate-800 text-sm md:text-base">${r.name}</h4>
+                                        ${badgeHtml}
+                                    </div>
+                                </div>
+                                <div class="mb-3 text-sm md:text-base">${starsHtml}</div>
+                                <p class="text-slate-600 font-bold text-sm md:text-base leading-loose relative z-10">"${r.text}"</p>
+                                ${replyHtml}
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    container.innerHTML = '<div class="w-full text-center bg-slate-50 p-8 rounded-3xl border-2 border-dashed border-slate-200 text-slate-400 font-bold">لا توجد آراء منشورة حتى الآن. كن أول من يشاركنا رأيه!</div>';
+                }
             },
             
             checkUrlParams: () => {
@@ -584,7 +750,7 @@
                 app.ensureDataReady(() => {
                     const grid = document.getElementById('lessons-hub-grid');
                     const categories = [
-                        { id: 'تخصص', name: 'شروحات التخصص', icon: 'fa-star', color: 'indigo' },
+                        { id: 'تخصص', name: 'شروحات التخصص', icon: 'fa-star', color: 'indigo', isMajor: true },
                         { id: 'تربوي', name: 'التربوي', icon: 'fa-chalkboard-teacher', color: 'blue' },
                         { id: 'جدارات', name: 'الجدارات السلوكية', icon: 'fa-brain', color: 'purple' },
                         { id: 'IQ', name: 'IQ والذكاء', icon: 'fa-puzzle-piece', color: 'orange' },
@@ -594,27 +760,67 @@
                         { id: 'معلومات عامة', name: 'معلومات عامة', icon: 'fa-globe', color: 'teal' }
                     ];
 
-                    grid.innerHTML = categories.map(c => `
-                        <button onclick="app.openLessonCategory('${c.id}', '${c.name}')" class="bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border-b-[6px] border-${c.color}-500 text-slate-700 font-black text-lg hover:-translate-y-2 hover:shadow-lg transition-all flex flex-col items-center justify-center gap-4 group">
+                    grid.innerHTML = categories.map(c => {
+                        const clickAction = c.isMajor ? `app.openLessonsMajors()` : `app.openLessonCategory('${c.id}', '${c.name}')`;
+                        return `
+                        <button onclick="${clickAction}" class="bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border-b-[6px] border-${c.color}-500 text-slate-700 font-black text-lg hover:-translate-y-2 hover:shadow-lg transition-all flex flex-col items-center justify-center gap-4 group">
                             <div class="bg-${c.color}-50 p-4 rounded-full group-hover:scale-110 transition-transform">
                                 <i class="fas ${c.icon} text-4xl text-${c.color}-500"></i>
                             </div>
                             <span class="text-center">${c.name}</span>
-                        </button>
-                    `).join('');
+                        </button>`;
+                    }).join('');
 
                     app.showSection('lessons-hub-view');
                 });
             },
+
+            openLessonsMajors: () => {
+                app.ensureDataReady(() => {
+                    const grid = document.getElementById('lessons-majors-grid');
+                    let html = '';
+                    const getColorForString = (str) => {
+                        const colors = ['emerald', 'blue', 'purple', 'rose', 'cyan', 'indigo', 'teal'];
+                        let hash = 0;
+                        for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
+                        return colors[Math.abs(hash) % colors.length];
+                    };
+
+                    (db.majors || []).forEach(m => {
+                        if (m === 'Competition' || m === 'GeneralFiles' || m === 'Universal') return;
+                        const color = getColorForString(m);
+                        html += `
+                        <button onclick="app.openLessonCategory('تخصص', 'شروحات ${m}', '${m}')" class="bg-white p-6 rounded-3xl shadow border-b-8 border-${color}-500 text-slate-700 font-black text-lg hover:-translate-y-1 transition-all flex flex-col items-center justify-center gap-3">
+                            <i class="fas fa-book-open text-3xl text-${color}-500"></i> <span class="text-center">${m}</span>
+                        </button>`;
+                    });
+                    
+                    if(!html) html = `<div class="col-span-2 md:col-span-3 text-center text-slate-400 font-bold p-8 bg-white rounded-2xl border-2 border-dashed border-slate-200">لا توجد أقسام مضافة حالياً</div>`;
+                    grid.innerHTML = html;
+                    app.showSection('lessons-majors-view');
+                });
+            },
             
-            openLessonCategory: (minorId, minorName) => {
+            openLessonCategory: (minorId, minorName, majorFilter = null) => {
                 state.currentLessonCatId = minorId;
                 state.currentLessonCatName = minorName;
+                state.currentLessonMajorFilter = majorFilter;
                 
-                document.getElementById('lesson-cat-title').innerHTML = `<i class="fas fa-list-ul text-indigo-500 mr-2"></i> قسم: ${minorName}`;
+                let backAction = majorFilter ? `app.openLessonsMajors()` : `app.openLessonsHub()`;
+                
+                document.getElementById('lesson-cat-title').innerHTML = `<i class="fas fa-list-ul text-indigo-500 mr-2"></i> ${minorName}`;
+                document.getElementById('lesson-cat-back-btn').setAttribute('onclick', backAction);
+
                 const container = document.getElementById('lessons-list-container');
                 
-                const lessons = (db.lessons || []).filter(l => l.minor === minorId);
+                const lessons = (db.lessons || []).filter(l => {
+                    if (majorFilter) {
+                        const isGeneralMinor = ['تربوي', 'جدارات', 'IQ', 'عربي للجميع', 'انجليزي للجميع', 'حاسب آلي', 'معلومات عامة'].includes(l.minor);
+                        return (l.major === majorFilter || l.major === 'Universal') && !isGeneralMinor;
+                    } else {
+                        return l.minor === minorId;
+                    }
+                });
                 
                 if(lessons.length > 0) {
                     container.innerHTML = lessons.map((l, index) => {
@@ -716,7 +922,7 @@
             
             renderUI: () => { 
                 const s = db.settings || {}; 
-                const els = { 'ui-site-name': s.siteName, 'ui-hero-title': s.heroTitle, 'ui-hero-desc': s.heroDesc, 'footer-text': s.footerText, 'ui-app-text': s.appText, 'ui-ext-text': s.extLinkText, 'ui-btn-vis': s.btnVisitor, 'ui-btn-sub': s.btnSub, }; 
+                const els = { 'ui-hero-title': s.heroTitle, 'ui-hero-desc': s.heroDesc, 'footer-text': s.footerText, 'ui-app-text': s.appText, 'ui-ext-text': s.extLinkText, 'ui-btn-vis': s.btnVisitor, 'ui-btn-sub': s.btnSub, }; 
                 for(let k in els) if(document.getElementById(k)) document.getElementById(k).innerText = els[k] || ""; 
                 
                 const waLink = document.getElementById('whatsapp-link'); 
@@ -806,12 +1012,8 @@
                 state.minor = m; 
                 document.getElementById('list-title').innerText = m === 'تخصص' ? `تخصص ${state.major}` : m; 
                 
-                const currentConfig = db.majorConfigs?.[state.major] || {type: 'standard'};
-                const isCustom = currentConfig.type === 'custom';
-
                 const quizzes = (db.quizzes||[]).filter(q => { 
-                    if (isCustom) return q.major === state.major && q.minor === m;
-                    else return q.minor === m && (q.major === 'Universal' || !q.major || q.major === state.major);
+                    return q.minor === m && (q.major === state.major || q.major === 'Universal' || !q.major);
                 }); 
                 
                 const qBox = document.getElementById('quizzes-box'); 
@@ -830,7 +1032,11 @@
 
                 const fBox = document.getElementById('files-box');
                 const fGrid = document.getElementById('files-grid');
-                const files = (db.files||[]).filter(f => f.major===state.major && f.minor===m);
+                
+                const files = (db.files||[]).filter(f => {
+                    return f.minor === m && (f.major === state.major || f.major === 'Universal' || !f.major);
+                });
+
                 if(files.length) {
                      fBox.classList.remove('hidden'); 
                      fGrid.innerHTML = files.map(f => ` <div onclick="app.openFile('${f.url}', ${f.mode === 'subscriber' && !state.isVIP})" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center cursor-pointer hover:bg-slate-50 transition-colors ${f.mode === 'subscriber' && !state.isVIP ? 'locked-item' : ''}"> <div class="flex items-center gap-3"> <div class="bg-red-50 p-2 rounded-lg"><i class="fas fa-file-pdf text-red-500 text-xl"></i></div> <span class="font-bold text-sm text-slate-700">${f.name}</span> </div> <i class="fas ${f.mode === 'subscriber' && !state.isVIP ? 'fa-lock text-slate-300' : 'fa-download text-brand-500'}"></i> </div>`).join('');
@@ -879,7 +1085,7 @@
             },
             backFromLessonReader: () => {
                 if(state.currentLessonCatId) {
-                    app.openLessonCategory(state.currentLessonCatId, state.currentLessonCatName);
+                    app.openLessonCategory(state.currentLessonCatId, state.currentLessonCatName, state.currentLessonMajorFilter);
                 } else {
                     app.openLessonsHub();
                 }
@@ -903,7 +1109,6 @@
             startSimulation: (id, locked) => { if(locked) { state.pendingAction = () => app.startSimulation(id, false); document.getElementById('subscriber-login-modal').classList.remove('hidden'); return; } const sim = db.simulations.find(x => x.id === id); if(!sim) return; let allQs = db.quizzes || []; const getPool = (majorFilter, minorFilter, count, label) => { let pool = []; allQs.forEach(q => { let matchMajor = majorFilter ? q.major === majorFilter : true; let matchMinor = q.minor === minorFilter; if(matchMajor && matchMinor && q.questions) pool.push(...q.questions); }); pool.sort(() => 0.5 - Math.random()); return pool.slice(0, count).map(q => ({ ...q, categoryName: label })); }; let finalQuestions = []; if(sim.targetMajor) finalQuestions.push(...getPool(sim.targetMajor, 'تخصص', sim.counts.spec, `تخصص: ${sim.targetMajor}`)); finalQuestions.push(...getPool(null, 'تربوي', sim.counts.ped, 'أسئلة تربوية')); finalQuestions.push(...getPool(null, 'جدارات', sim.counts.comp, 'الجدارات السلوكية')); finalQuestions.push(...getPool(null, 'IQ', sim.counts.iq, 'IQ والذكاء')); finalQuestions.push(...getPool(null, 'عربي للجميع', sim.counts.ar, 'لغة عربية (عام)')); finalQuestions.push(...getPool(null, 'انجليزي للجميع', sim.counts.en, 'لغة إنجليزية (عام)')); finalQuestions.push(...getPool(null, 'حاسب آلي', sim.counts.cs, 'حاسب آلي')); finalQuestions.push(...getPool(null, 'معلومات عامة', sim.counts.gen, 'معلومات عامة')); if(!finalQuestions.length) return app.notify("لا توجد أسئلة كافية لإنشاء هذا المحاكي", "error"); state.quiz = { questions: finalQuestions }; state.score = 0; state.qIdx = 0; state.answers = new Array(finalQuestions.length).fill(null); app.startTimer(sim.time); app.showSection('exam-player'); app.renderQ(); },
             startTimer: (min) => { const d = document.getElementById('timer-display'); d.classList.remove('hidden'); let t = min * 60; if(state.timerInterval) clearInterval(state.timerInterval); state.timerInterval = setInterval(() => { let m = Math.floor(t/60); let s = t%60; d.innerText = `${m}:${s<10?'0'+s:s}`; if(t-- <= 0) { clearInterval(state.timerInterval); app.notify("انتهى الوقت المحدد للاختبار", "error"); app.finishExam(); } }, 1000); },
             
-            /* ---- التعديل السحري لعرض الصورة مع السؤال ---- */
             renderQ: () => { 
                 document.getElementById('question-box').classList.remove('hidden'); 
                 document.getElementById('result-box').classList.add('hidden'); 
@@ -913,7 +1118,6 @@
                 document.getElementById('progress-text').innerText = `سؤال ${state.qIdx+1} من ${state.quiz.questions.length}`; 
                 document.getElementById('progress-bar').style.width = progress+"%"; 
                 
-                // التأكد من وجود صورة
                 const imgHtml = q.imageUrl ? `
                     <div class="q-image-container">
                         <img src="${q.imageUrl}" alt="صورة توضيحية للسؤال" loading="lazy">
@@ -927,7 +1131,8 @@
                         </div> 
                         <h3 class="font-black text-xl md:text-2xl leading-relaxed text-slate-800">${q.text}</h3> 
                         
-                        ${imgHtml} <div class="grid gap-4 mt-6"> 
+                        ${imgHtml} 
+                        <div class="grid gap-4 mt-6"> 
                             ${q.opts.map((o,i)=>`<button onclick="app.ans(${i},this)" class="opt-btn group"><span class="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full border-2 border-slate-200 flex items-center justify-center text-xs text-slate-400 group-hover:border-brand-500 group-hover:text-brand-500 font-bold transition-colors">${['أ','ب','ج','د'][i]}</span><span class="mr-10 block">${o}</span></button>`).join('')} 
                         </div> 
                     </div>`; 
@@ -935,7 +1140,6 @@
 
             ans: (i, btn) => { const q = state.quiz.questions[state.qIdx]; state.answers[state.qIdx] = i; document.querySelectorAll('.opt-btn').forEach(b=>b.disabled=true); const correctIdx = parseInt(q.correctAnswer); if(i === correctIdx) { btn.classList.add('correct'); state.score++; app.notify("إجابة صحيحة! أحسنت", "success"); } else { btn.classList.add('wrong'); document.querySelectorAll('.opt-btn')[correctIdx].classList.add('correct'); app.notify("إجابة خاطئة", "error"); } setTimeout(() => { if(++state.qIdx < state.quiz.questions.length) app.renderQ(); else app.finishExam(); }, 1500); },
             
-            /* ---- التعديل السحري لعرض الصورة في صفحة النتيجة والمراجعة ---- */
             finishExam: () => { 
                 if(state.timerInterval) clearInterval(state.timerInterval); 
                 document.getElementById('question-box').classList.add('hidden'); 
@@ -952,7 +1156,6 @@
                     const userAnsIdx = state.answers[idx]; 
                     const isCorrect = userAnsIdx === q.correctAnswer; 
                     
-                    // صورة المراجعة
                     const reviewImgHtml = q.imageUrl ? `<div class="mt-3 mb-4 text-center"><img src="${q.imageUrl}" alt="مرفق السؤال" class="max-h-32 object-contain rounded-lg inline-block border border-slate-200 shadow-sm"></div>` : '';
 
                     return ` 
@@ -963,7 +1166,8 @@
                         </div> 
                         <p class="font-bold text-slate-800 mb-2 text-sm md:text-base leading-relaxed">${idx+1}. ${q.text}</p> 
                         
-                        ${reviewImgHtml} <div class="text-xs space-y-2 bg-slate-50 p-3 rounded-xl mt-3"> 
+                        ${reviewImgHtml} 
+                        <div class="text-xs space-y-2 bg-slate-50 p-3 rounded-xl mt-3"> 
                             <p class="${isCorrect ? 'text-green-700' : 'text-red-600'} font-bold flex items-center gap-2"> 
                                 <span class="opacity-70 w-12">إجابتك:</span> 
                                 <span class="flex-1 border-r-2 border-slate-300 pr-2">${userAnsIdx !== null ? q.opts[userAnsIdx] : "لم يتم الاختيار"}</span> 
